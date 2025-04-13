@@ -34,10 +34,12 @@ func init() {
 // Main is the app main function
 func Main() int {
 	var s State
+	helmHelper := &HelmHelper{} // Initialize HelmHelper with default values
 
 	flags.parse()
 
-	// delete temp files with substituted env vars when the program terminates
+	helmHelper.verifyFlag = flags.verify
+
 	defer os.RemoveAll(tempFilesDir)
 	if !flags.noCleanup {
 		defer s.cleanup()

@@ -13,6 +13,22 @@ import (
 	"github.com/Praqma/helmsman/internal/gcs"
 )
 
+type HelmHelper struct {
+	verifyFlag bool
+}
+
+func (h *HelmHelper) helmCmd(args []string, desc string) Command {
+	// Only append --verify flag to specific commands
+	if h.verifyFlag && (args[0] == "install" || args[0] == "upgrade" || args[0] == "pull") {
+		args = append(args, "--verify")
+	}
+	return Command{
+		Cmd:         helmBin,
+		Args:        args,
+		Description: desc,
+	}
+}
+
 type helmRepo struct {
 	Name string `json:"name"`
 	URL  string `json:"url"`
@@ -21,15 +37,6 @@ type helmRepo struct {
 type ChartInfo struct {
 	Name    string `json:"name"`
 	Version string `json:"version"`
-}
-
-// helmCmd prepares a helm command to be executed
-func helmCmd(args []string, desc string) Command {
-	return Command{
-		Cmd:         helmBin,
-		Args:        args,
-		Description: desc,
-	}
 }
 
 // getChartInfo fetches the latest chart information (name, version) matching the semantic versioning constraints.

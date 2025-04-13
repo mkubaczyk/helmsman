@@ -1,6 +1,7 @@
 module github.com/Praqma/helmsman
 
 go 1.24.1
+
 require (
 	cloud.google.com/go/storage v1.51.0
 	dario.cat/mergo v1.0.1

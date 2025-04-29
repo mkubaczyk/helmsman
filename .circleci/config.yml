@@ -17,7 +17,7 @@ jobs:
     docker:
       - image: goreleaser/goreleaser
         entrypoint: /bin/bash
-    working_directory: "/go/src/github.com/Praqma/helmsman"
+    working_directory: "/go/src/github.com/mkubaczyk/helmsman"
     steps:
       - run:
           name: install git

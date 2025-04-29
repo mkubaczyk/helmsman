@@ -139,11 +139,11 @@ You can do that by setting `deleteOnSuccess` to true in the `globalHooks` stanza
 
 You can expand variables/parameters in the hook manifests at run time in one of the following ways:
 
-- use env variables (defined as `$MY_VAR` in your manifests) and run helmsman with `--subst-env-values`. Environment variables can be read from the environment or you can [load them from an env file](https://github.com/Praqma/helmsman/blob/master/docs/how_to/apps/secrets.md#passing-secrets-from-env-files)
+- use env variables (defined as `$MY_VAR` in your manifests) and run helmsman with `--subst-env-values`. Environment variables can be read from the environment or you can [load them from an env file](https://github.com/mkubaczyk/helmsman/blob/master/docs/how_to/apps/secrets.md#passing-secrets-from-env-files)
 
 - use [AWS SSM parameters](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html) (defined as `{{ssm: MY_PARAM }}` in your manifests) and run helmsman with `--subst-ssm-values`.
 
-- Pass encrypted values with [hiera-eyaml](https://github.com/Praqma/helmsman/blob/master/docs/how_to/settings/use-hiera-eyaml-as-secrets-encryption.md)
+- Pass encrypted values with [hiera-eyaml](https://github.com/mkubaczyk/helmsman/blob/master/docs/how_to/settings/use-hiera-eyaml-as-secrets-encryption.md)
 
 ## Limitations
 

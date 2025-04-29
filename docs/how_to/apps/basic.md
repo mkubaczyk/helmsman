@@ -6,7 +6,7 @@ version: v3.0.0-beta5
 
 ## Install releases
 
-You can run helmsman with the [example.toml](https://github.com/Praqma/helmsman/blob/master/examples/example.toml) or [example.yaml](https://github.com/Praqma/helmsman/blob/master/examples/example.yaml) file.
+You can run helmsman with the [example.toml](https://github.com/mkubaczyk/helmsman/blob/master/examples/example.toml) or [example.yaml](https://github.com/mkubaczyk/helmsman/blob/master/examples/example.yaml) file.
 
 ```shell
 $ helmsman --apply -f example.toml

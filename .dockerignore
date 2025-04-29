@@ -1,4 +1,5 @@
 .circleci
+.github
 keys
 vendor
 .gitignore

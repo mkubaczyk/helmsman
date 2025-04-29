@@ -12,3 +12,5 @@ keys/*
 !cmd/**/*
 .helmsman-tmp
 .idea
+# Added by goreleaser init:
+dist/

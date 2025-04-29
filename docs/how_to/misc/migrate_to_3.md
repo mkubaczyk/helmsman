@@ -16,8 +16,8 @@ The migration process can go as follows:
 > At this stage, Helm v3 can see and operate on your releases, but Helmsman can't. This is because Helmsman defined labels haven't been migrated to the Helm v3 releases state.
 
 ## Migrate to Helmsman v3.x
-- Download the latest Helmsman v3.x release from [Github releases](https://github.com/Praqma/helmsman/releases) 
-- Modify your Helmsman's TOML/YAML desired state files (DSFs) to be Helmsman v3.x compatible. You can check [v3.0.0 release notes](https://github.com/Praqma/helmsman/blob/v3.0.0/release-notes.md) for what's changed and verify from the [Desired State Spec](https://github.com/Praqma/helmsman/blob/master/docs/desired_state_specification.md) that your DSF files are compatible. 
+- Download the latest Helmsman v3.x release from [Github releases](https://github.com/mkubaczyk/helmsman/releases) 
+- Modify your Helmsman's TOML/YAML desired state files (DSFs) to be Helmsman v3.x compatible. You can check [v3.0.0 release notes](https://github.com/mkubaczyk/helmsman/blob/v3.0.0/release-notes.md) for what's changed and verify from the [Desired State Spec](https://github.com/mkubaczyk/helmsman/blob/master/docs/desired_state_specification.md) that your DSF files are compatible. 
 
 > Everything related to Tiller will be removed from your DSFs at this stage.
 

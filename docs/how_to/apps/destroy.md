@@ -8,5 +8,5 @@ Helmsman allows you to delete all the helm releases that were deployed by Helmsm
 
 The `--destroy` flag will remove all deployed releases from a given desired state file (DSF). Note that this does not currently delete the namespaces nor the Kubernetes contexts created.
 
-This was originally requested in issue [#88](https://github.com/Praqma/helmsman/issues/88).
+This was originally requested in issue [#88](https://github.com/mkubaczyk/helmsman/issues/88).
 

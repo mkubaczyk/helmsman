@@ -26,36 +26,33 @@ ENV HELM_SECRETS_VERSION=$GLOBAL_HELM_SECRETS_VERSION
 ENV SOPS_VERSION=$GLOBAL_SOPS_VERSION
 ENV HELM_DIFF_THREE_WAY_MERGE=true
 
-RUN apk add --update --no-cache ca-certificates git openssh-client openssl ruby curl wget tar gzip make bash
+RUN apk add --update --no-cache ca-certificates git openssh-client openssl ruby curl wget tar gzip make bash \
+    && curl -L https://github.com/getsops/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.linux.amd64 -o /usr/local/bin/sops \
+    && chmod +x /usr/local/bin/sops \
+    && curl --retry 5 -L https://dl.k8s.io/release/${KUBE_VERSION}/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl \
+    && chmod +x /usr/local/bin/kubectl \
+    && curl --retry 5 -Lk https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz | tar zxv -C /tmp \
+    && mv /tmp/linux-amd64/helm /usr/local/bin/helm && rm -rf /tmp/linux-amd64 \
+    && chmod +x /usr/local/bin/helm
 
-RUN curl -L https://github.com/getsops/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.linux.amd64 -o /usr/local/bin/sops \
-    && chmod +x /usr/local/bin/sops
-
-RUN curl --retry 5 -L https://dl.k8s.io/release/${KUBE_VERSION}/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl
-RUN chmod +x /usr/local/bin/kubectl
-
-RUN curl --retry 5 -Lk https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz | tar zxv -C /tmp
-RUN mv /tmp/linux-amd64/helm /usr/local/bin/helm && rm -rf /tmp/linux-amd64
-RUN chmod +x /usr/local/bin/helm
-
-RUN helm plugin install https://github.com/hypnoglow/helm-s3.git --version ${HELM_S3_VERSION}
-RUN helm plugin install https://github.com/nouney/helm-gcs --version ${HELM_GCS_VERSION}
-RUN helm plugin install https://github.com/databus23/helm-diff --version ${HELM_DIFF_VERSION}
-RUN helm plugin install https://github.com/jkroepke/helm-secrets --version ${HELM_SECRETS_VERSION}
+RUN helm plugin install https://github.com/hypnoglow/helm-s3.git --version ${HELM_S3_VERSION} \
+    && helm plugin install https://github.com/nouney/helm-gcs --version ${HELM_GCS_VERSION} \
+    && helm plugin install https://github.com/databus23/helm-diff --version ${HELM_DIFF_VERSION} \
+    && helm plugin install https://github.com/jkroepke/helm-secrets --version ${HELM_SECRETS_VERSION}
 
 ### Go Builder & Tester ###
 FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS builder
 
-RUN apk add --update --no-cache ca-certificates git openssh-client ruby bash make curl
-RUN gem install hiera-eyaml hiera-eyaml-gkms --no-doc
-RUN update-ca-certificates
+RUN apk add --update --no-cache ca-certificates git openssh-client ruby bash make curl \
+    && gem install hiera-eyaml hiera-eyaml-gkms --no-doc \
+    && update-ca-certificates
 
 COPY --from=helm-installer /usr/local/bin/kubectl /usr/local/bin/kubectl
 COPY --from=helm-installer /usr/local/bin/helm /usr/local/bin/helm
 COPY --from=helm-installer /root/.cache/helm/plugins/ /root/.cache/helm/plugins/
 COPY --from=helm-installer /root/.local/share/helm/plugins/ /root/.local/share/helm/plugins/
 
-WORKDIR /go/src/github.com/Praqma/helmsman
+WORKDIR /go/src/github.com/mkubaczyk/helmsman
 
 COPY . .
 RUN make test \
@@ -69,9 +66,9 @@ RUN make test \
 ### Final Image ###
 FROM alpine:${ALPINE_VERSION} AS base
 
-RUN apk add --update --no-cache ca-certificates git openssh-client ruby curl bash gnupg gcompat
-RUN gem install hiera-eyaml hiera-eyaml-gkms --no-doc
-RUN update-ca-certificates
+RUN apk add --update --no-cache ca-certificates git openssh-client ruby curl bash gnupg gcompat \
+    && gem install hiera-eyaml hiera-eyaml-gkms --no-doc \
+    && update-ca-certificates
 
 COPY --from=helm-installer /usr/local/bin/kubectl /usr/local/bin/kubectl
 COPY --from=helm-installer /usr/local/bin/helm /usr/local/bin/helm
@@ -79,4 +76,4 @@ COPY --from=helm-installer /usr/local/bin/sops /usr/local/bin/sops
 COPY --from=helm-installer /root/.cache/helm/plugins/ /root/.cache/helm/plugins/
 COPY --from=helm-installer /root/.local/share/helm/plugins/ /root/.local/share/helm/plugins/
 
-COPY --from=builder /go/src/github.com/Praqma/helmsman/helmsman /bin/helmsman
+COPY --from=builder /go/src/github.com/mkubaczyk/helmsman/helmsman /bin/helmsman

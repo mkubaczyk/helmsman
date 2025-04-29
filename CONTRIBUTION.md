@@ -7,7 +7,7 @@ Pull requests, feeback/feature requests are all welcome. This guide will be upda
 To build helmsman from source, you need go:1.17+. Follow the steps below:
 
 ```sh
-git clone https://github.com/Praqma/helmsman.git
+git clone https://github.com/mkubaczyk/helmsman.git
 make tools # installs few tools for testing, building, releasing
 make build
 make test

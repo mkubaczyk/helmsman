@@ -6,7 +6,7 @@ version: v3.2.0
 
 There are two main use cases for this flag:
 
-1. To speed up Helmsman's execution when you have too many release (see [issue #418](https://github.com/Praqma/helmsman/issues/418))
+1. To speed up Helmsman's execution when you have too many release (see [issue #418](https://github.com/mkubaczyk/helmsman/issues/418))
    This flag works by skipping the search for the context information which Helmsman adds in the form of labels to the helm release state (secrets/configmaps). 
    
    > Use this option with caution. You must be sure that this won't cause conflicts.

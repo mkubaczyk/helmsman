@@ -78,7 +78,7 @@ func (r *Release) isConsideredToRun() bool {
 }
 
 // validate validates if a release inside a desired state meets the specifications or not.
-// check the full specification @ https://github.com/Praqma/helmsman/blob/master/docs/desired_state_specification.md
+// check the full specification @ https://github.com/mkubaczyk/helmsman/blob/master/docs/desired_state_specification.md
 func (r *Release) validate(appLabel string, seen map[string]map[string]bool, s *State) error {
 	if seen[r.Name][r.Namespace] {
 		return errors.New("release name must be unique within a given namespace")
@@ -280,7 +280,7 @@ func (r *Release) rollback(cs *currentState, p *plan) {
 		p.addDecision("Release [ "+r.Name+" ] is deleted BUT from namespace [ "+rs.Namespace+
 			" ]. Will purge delete it from there and install it in namespace [ "+r.Namespace+" ]", r.Priority, create)
 		p.addDecision("WARNING: rolling back release [ "+r.Name+" ] from [ "+rs.Namespace+" ] to [ "+r.Namespace+
-			" ] might not correctly connect to existing volumes. Check https://github.com/Praqma/helmsman/blob/master/docs/how_to/apps/moving_across_namespaces.md"+
+			" ] might not correctly connect to existing volumes. Check https://github.com/mkubaczyk/helmsman/blob/master/docs/how_to/apps/moving_across_namespaces.md"+
 			" for details if this release uses PV and PVC.", r.Priority, create)
 	}
 }

@@ -330,7 +330,7 @@ func (cs *currentState) inspectUpgradeScenario(r *Release, p *plan, c *ChartInfo
 			" ]. Uninstall of the current release from namespace [ "+rs.Namespace+" ] will be performed "+
 			"and then installation in namespace [ "+r.Namespace+" ] will take place", r.Priority, change)
 		p.addDecision("WARNING: moving release [ "+r.Name+" ] from [ "+rs.Namespace+" ] to [ "+r.Namespace+
-			" ] might not correctly connect existing volumes. Check https://github.com/Praqma/helmsman/blob/master/docs/how_to/apps/moving_across_namespaces.md#note-on-persistent-volumes"+
+			" ] might not correctly connect existing volumes. Check https://github.com/mkubaczyk/helmsman/blob/master/docs/how_to/apps/moving_across_namespaces.md#note-on-persistent-volumes"+
 			" for details if this release uses PV and PVC.", r.Priority, change)
 		return nil
 	}

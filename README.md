@@ -1,4 +1,4 @@
-[![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=v3.18.0&x2=0)](https://github.com/Praqma/helmsman/releases) [![CircleCI](https://circleci.com/gh/Praqma/helmsman/tree/master.svg?style=svg)](https://circleci.com/gh/Praqma/helmsman/tree/master)
+[![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=v3.18.0&x2=0)](https://github.com/mkubaczyk/helmsman/releases) [![CircleCI](https://circleci.com/gh/Praqma/helmsman/tree/master.svg?style=svg)](https://circleci.com/gh/Praqma/helmsman/tree/master)
 
 ![helmsman-logo](docs/images/helmsman.png)
 
@@ -17,10 +17,10 @@ Thank you for your patience and trusting Helmsman with your tasks!
 
 # How does it work?
 
-Helmsman uses a simple declarative [TOML](https://github.com/toml-lang/toml) file to allow you to describe a desired state for your k8s applications as in the [example toml file](https://github.com/Praqma/helmsman/blob/master/examples/example.toml).
-Alternatively YAML declaration is also acceptable [example yaml file](https://github.com/Praqma/helmsman/blob/master/examples/example.yaml).
+Helmsman uses a simple declarative [TOML](https://github.com/toml-lang/toml) file to allow you to describe a desired state for your k8s applications as in the [example toml file](https://github.com/mkubaczyk/helmsman/blob/master/examples/example.toml).
+Alternatively YAML declaration is also acceptable [example yaml file](https://github.com/mkubaczyk/helmsman/blob/master/examples/example.yaml).
 
-The desired state file (DSF) follows the [desired state specification](https://github.com/Praqma/helmsman/blob/master/docs/desired_state_specification.md).
+The desired state file (DSF) follows the [desired state specification](https://github.com/mkubaczyk/helmsman/blob/master/docs/desired_state_specification.md).
 
 Helmsman sees what you desire, validates that your desire makes sense (e.g. that the charts you desire are available in the repos you defined), compares it with the current state of Helm and figures out what to do to make your desire come true.
 
@@ -78,15 +78,15 @@ Please make sure the following are installed prior to using `helmsman` as a bina
 - [helm](https://github.com/helm/helm) (helm >=v2.10.0 for `helmsman` >= 1.6.0, helm >=v3.0.0 for `helmsman` >=v3.0.0)
 - [helm-diff](https://github.com/databus23/helm-diff) (`helmsman` >= 1.6.0)
 
-If you use private helm repos, you will need either `helm-gcs` or `helm-s3` plugin or you can use basic auth to authenticate to your repos. See the [docs](https://github.com/Praqma/helmsman/blob/master/docs/how_to/helm_repos) for details.
+If you use private helm repos, you will need either `helm-gcs` or `helm-s3` plugin or you can use basic auth to authenticate to your repos. See the [docs](https://github.com/mkubaczyk/helmsman/blob/master/docs/how_to/helm_repos) for details.
 
-Check the [releases page](https://github.com/Praqma/Helmsman/releases) for the different versions.
+Check the [releases page](https://github.com/mkubaczyk/helmsman/releases) for the different versions.
 
 ```sh
 # on Linux
-curl -L https://github.com/Praqma/helmsman/releases/download/v3.18.0/helmsman_3.18.0_linux_amd64.tar.gz | tar zx
+curl -L https://github.com/mkubaczyk/helmsman/releases/download/v3.18.0/helmsman_3.18.0_linux_amd64.tar.gz | tar zx
 # on MacOS
-curl -L https://github.com/Praqma/helmsman/releases/download/v3.18.0/helmsman_3.18.0_darwin_amd64.tar.gz | tar zx
+curl -L https://github.com/mkubaczyk/helmsman/releases/download/v3.18.0/helmsman_3.18.0_darwin_amd64.tar.gz | tar zx
 
 mv helmsman /usr/local/bin/helmsman
 ```
@@ -114,19 +114,19 @@ asdf install helmsman latest
 
 # Documentation
 
-> Documentation for Helmsman v1.x can be found at: [docs v1.x](https://github.com/Praqma/helmsman/tree/1.x/docs)
+> Documentation for Helmsman v1.x can be found at: [docs v1.x](https://github.com/mkubaczyk/helmsman/tree/1.x/docs)
 
-- [How-Tos](https://github.com/Praqma/helmsman/blob/master/docs/how_to/).
-- [Desired state specification](https://github.com/Praqma/helmsman/blob/master/docs/desired_state_specification.md).
-- [CMD reference](https://github.com/Praqma/helmsman/blob/master/docs/cmd_reference.md)
+- [How-Tos](https://github.com/mkubaczyk/helmsman/blob/master/docs/how_to/).
+- [Desired state specification](https://github.com/mkubaczyk/helmsman/blob/master/docs/desired_state_specification.md).
+- [CMD reference](https://github.com/mkubaczyk/helmsman/blob/master/docs/cmd_reference.md)
 
 ## Usage
 
 Helmsman can be used in three different settings:
 
-- [As a binary with a hosted cluster](https://github.com/Praqma/helmsman/blob/master/docs/how_to/settings).
-- [As a docker image in a CI system or local machine](https://github.com/Praqma/helmsman/blob/master/docs/how_to/deployments/ci.md) Always use a tagged docker image from [dockerhub](https://hub.docker.com/r/praqma/helmsman/) as the `latest` image can (at times) be unstable.
-- [As a docker image inside a k8s cluster](https://github.com/Praqma/helmsman/blob/master/docs/how_to/deployments/inside_k8s.md)
+- [As a binary with a hosted cluster](https://github.com/mkubaczyk/helmsman/blob/master/docs/how_to/settings).
+- [As a docker image in a CI system or local machine](https://github.com/mkubaczyk/helmsman/blob/master/docs/how_to/deployments/ci.md) Always use a tagged docker image from [dockerhub](https://hub.docker.com/r/praqma/helmsman/) as the `latest` image can (at times) be unstable.
+- [As a docker image inside a k8s cluster](https://github.com/mkubaczyk/helmsman/blob/master/docs/how_to/deployments/inside_k8s.md)
 
 # Contributing
 

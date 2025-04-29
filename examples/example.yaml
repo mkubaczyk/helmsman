@@ -122,4 +122,4 @@ apps:
     # additional helm flags for this release
     helmFlags:
       - "--devel"
-# See https://github.com/Praqma/helmsman/blob/master/docs/desired_state_specification.md#apps for more apps options
+# See https://github.com/mkubaczyk/helmsman/blob/master/docs/desired_state_specification.md#apps for more apps options

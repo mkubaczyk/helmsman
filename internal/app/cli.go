@@ -99,7 +99,6 @@ type cli struct {
 	skipPendingApps       bool
 	pendingAppRetries     int
 	showSecrets           bool
-	verify                bool
 }
 
 func printUsage() {
@@ -158,7 +157,6 @@ func (c *cli) setup() {
 	flag.BoolVar(&c.skipPendingApps, "skip-pending", false, "skip pending helm releases")
 	flag.IntVar(&c.pendingAppRetries, "pending-max-retries", 0, "max number of retries for pending helm releases")
 	flag.BoolVar(&c.showSecrets, "show-secrets", false, "show helm diff results with secrets.")
-	flag.BoolVar(&c.verify, "verify", false, "verify the downloaded charts")
 	flag.Usage = printUsage
 	flag.Parse()
 }

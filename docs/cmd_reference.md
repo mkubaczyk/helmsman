@@ -83,7 +83,7 @@ This lists available CMD options in Helmsman:
 
   `--no-ssm-subst`
         turn off SSM parameter substitution globally.
-
+   
   `--replace-on-rename`
         uninstall the existing release when a chart with a different name is used.
 
@@ -120,8 +120,4 @@ This lists available CMD options in Helmsman:
   `--check-for-chart-updates`
         compares the chart versions in the state file to the latest versions in the chart repositories and shows available updates
 
-  `--v`    
-        show the version.
-
-  `--verify`
-        verify the downloaded charts.
+  `--v`    show the version.

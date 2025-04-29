@@ -8,6 +8,13 @@
 
 Helmsman is a Helm Charts (k8s applications) as Code tool which allows you to automate the deployment/management of your Helm charts from version controlled code.
 
+# Why has this repository changed the owner?
+
+The previous owner (Praqma company, later Eficode company) of this repository decided to transfer the repository into the hands of current maintainers
+to make sure the project can be developed further with no interruptions and unnecessary dependencies.
+We'll do our best to get it up and running as soon as possible. 
+Thank you for your patience and trusting Helmsman with your tasks!
+
 # How does it work?
 
 Helmsman uses a simple declarative [TOML](https://github.com/toml-lang/toml) file to allow you to describe a desired state for your k8s applications as in the [example toml file](https://github.com/Praqma/helmsman/blob/master/examples/example.toml).

@@ -84,9 +84,9 @@ Check the [releases page](https://github.com/mkubaczyk/helmsman/releases) for th
 
 ```sh
 # on Linux
-curl -L https://github.com/mkubaczyk/helmsman/releases/download/v4.0.0/helmsman_4.0.0_linux_amd64.tar.gz | tar zx
+curl -L https://github.com/mkubaczyk/helmsman/releases/download/v4.0.1/helmsman_4.0.1_linux_amd64.tar.gz | tar zx
 # on MacOS
-curl -L https://github.com/mkubaczyk/helmsman/releases/download/v4.0.0/helmsman_4.0.0_darwin_amd64.tar.gz | tar zx
+curl -L https://github.com/mkubaczyk/helmsman/releases/download/v4.0.1/helmsman_4.0.1_darwin_amd64.tar.gz | tar zx
 
 mv helmsman /usr/local/bin/helmsman
 ```
@@ -98,7 +98,7 @@ docker pull ghcr.io/mkubaczyk/helmsman:latest
 ```
 or with specific release
 ```
-docker pull ghcr.io/mkubaczyk/helmsman:v4.0.0
+docker pull ghcr.io/mkubaczyk/helmsman:v4.0.1
 ```
 
 ## As a package

@@ -84,16 +84,22 @@ Check the [releases page](https://github.com/mkubaczyk/helmsman/releases) for th
 
 ```sh
 # on Linux
-curl -L https://github.com/mkubaczyk/helmsman/releases/download/v3.18.0/helmsman_3.18.0_linux_amd64.tar.gz | tar zx
+curl -L https://github.com/mkubaczyk/helmsman/releases/download/v4.0.0/helmsman_4.0.0_linux_amd64.tar.gz | tar zx
 # on MacOS
-curl -L https://github.com/mkubaczyk/helmsman/releases/download/v3.18.0/helmsman_3.18.0_darwin_amd64.tar.gz | tar zx
+curl -L https://github.com/mkubaczyk/helmsman/releases/download/v4.0.0/helmsman_4.0.0_darwin_amd64.tar.gz | tar zx
 
 mv helmsman /usr/local/bin/helmsman
 ```
 
 ## As a docker image
 
-Check the images on [dockerhub](https://hub.docker.com/r/praqma/helmsman/tags/)
+```
+docker pull ghcr.io/mkubaczyk/helmsman:latest
+```
+or with specific release
+```
+docker pull ghcr.io/mkubaczyk/helmsman:v4.0.0
+```
 
 ## As a package
 

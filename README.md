@@ -1,4 +1,4 @@
-[![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=v3.18.0&x2=0)](https://github.com/mkubaczyk/helmsman/releases) [![CircleCI](https://circleci.com/gh/Praqma/helmsman/tree/master.svg?style=svg)](https://circleci.com/gh/Praqma/helmsman/tree/master)
+[![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=v4.0.0&x2=0)](https://github.com/mkubaczyk/helmsman/releases)
 
 ![helmsman-logo](docs/images/helmsman.png)
 

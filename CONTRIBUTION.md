@@ -51,4 +51,3 @@ The following steps are needed to cut a release (They assume that you are on mas
 5. Commit your changes locally.
 6. Create a git tag with the following command: `git tag -a <semantic version number> -m "<semantic version number>" <your-last-commit-sha>`
 7. Push your commit and tag with `git push --follow-tags`
-8. This should trigger the [pipeline on circleci](https://circleci.com/gh/Praqma/workflows/helmsman) which eventually releases to Github and dockerhub.

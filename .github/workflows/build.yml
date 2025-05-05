@@ -58,7 +58,7 @@ jobs:
             ghcr.io/${{ github.repository }}
           flavor: |
             latest=true
-          tags: ${{ github.ref_type == 'tag' && 'type=semver,pattern={{version}}' || '' }}
+          tags: ${{ github.ref_type == 'tag' && 'type=semver,pattern=v{{version}}' || '' }}
 
       - name: Build and push Docker image
         id: push

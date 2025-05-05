@@ -1,8 +1,10 @@
-# v3.18.0
+# v4.0.0
 
 ## New feature
 
 ## Fixes and improvements
 
-- Create namespace with labels & annotations in a single request (#935)
-- Update go to 1.24 (#945)
+## Changes
+
+- Changed Docker image name to ghcr.io/mkubaczyk/helmsman
+- Changed CircleCI-based build to Github Actions

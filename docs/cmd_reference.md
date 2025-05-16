@@ -120,4 +120,7 @@ This lists available CMD options in Helmsman:
   `--check-for-chart-updates`
         compares the chart versions in the state file to the latest versions in the chart repositories and shows available updates
 
+  `--verify`
+        verify if charts are signed and valid before using them
+
   `--v`    show the version.

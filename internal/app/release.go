@@ -412,6 +412,10 @@ func (r *Release) getHelmFlags() []string {
 		flgs = append(flgs, "--force")
 	}
 
+	if flags.verify {
+		flgs = append(flgs, "--verify")
+	}
+
 	return concat(r.getNoHooks(), r.getWait(), r.getTimeout(), r.getMaxHistory(), flags.getRunFlags(), r.HelmFlags, flgs)
 }
 

@@ -73,7 +73,7 @@ func getChartInfo(chartName, chartVersion string) (*ChartInfo, error) {
 
 // getHelmClientVersion returns Helm client Version
 func getHelmVersion() string {
-	cmd := helmCmd([]string{"version", "--short", "--client"}, "Checking Helm version")
+	cmd := helmCmd([]string{"version", "--short"}, "Checking Helm version")
 
 	res, err := cmd.Exec()
 	if err != nil {

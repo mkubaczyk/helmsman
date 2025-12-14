@@ -35,10 +35,10 @@ RUN apk add --update --no-cache ca-certificates git openssh-client openssl ruby 
   && mv /tmp/linux-amd64/helm /usr/local/bin/helm && rm -rf /tmp/linux-amd64 \
   && chmod +x /usr/local/bin/helm
 
-RUN helm plugin install https://github.com/hypnoglow/helm-s3.git --version ${HELM_S3_VERSION} \
-  && helm plugin install https://github.com/nouney/helm-gcs --version ${HELM_GCS_VERSION} \
-  && helm plugin install https://github.com/databus23/helm-diff --version ${HELM_DIFF_VERSION} \
-  && helm plugin install https://github.com/jkroepke/helm-secrets --version ${HELM_SECRETS_VERSION}
+RUN helm plugin install --verify=false https://github.com/hypnoglow/helm-s3.git --version ${HELM_S3_VERSION} \
+  && helm plugin install --verify=false https://github.com/nouney/helm-gcs --version ${HELM_GCS_VERSION} \
+  && helm plugin install --verify=false https://github.com/databus23/helm-diff --version ${HELM_DIFF_VERSION} \
+  && helm plugin install --verify=false https://github.com/jkroepke/helm-secrets --version ${HELM_SECRETS_VERSION}
 
 ### Go Builder & Tester ###
 FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS builder

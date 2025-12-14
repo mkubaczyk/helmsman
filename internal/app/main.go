@@ -8,7 +8,7 @@ import (
 const (
 	helmBin            = "helm"
 	kubectlBin         = "kubectl"
-	appVersion         = "v4.0.1"
+	appVersion         = "v4.0.2"
 	tempFilesDir       = ".helmsman-tmp"
 	defaultContextName = "default"
 	resourcePool       = 10

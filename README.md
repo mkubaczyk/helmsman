@@ -1,4 +1,4 @@
-[![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=v4.0.0&x2=0)](https://github.com/mkubaczyk/helmsman/releases)
+[![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=v4.0.1&x2=0)](https://github.com/mkubaczyk/helmsman/releases)
 
 ![helmsman-logo](docs/images/helmsman.png)
 
@@ -12,7 +12,7 @@ Helmsman is a Helm Charts (k8s applications) as Code tool which allows you to au
 
 The previous owner (Praqma company, later Eficode company) of this repository decided to transfer the repository into the hands of current maintainers
 to make sure the project can be developed further with no interruptions and unnecessary dependencies.
-We'll do our best to get it up and running as soon as possible. 
+We'll do our best to get it up and running as soon as possible.
 Thank you for your patience and trusting Helmsman with your tasks!
 
 # How does it work?

@@ -1,4 +1,4 @@
-# v4.0.1
+# v4.0.2
 
 ## New feature
 
@@ -6,5 +6,4 @@
 
 ## Changes
 
-- Changed Docker image name to ghcr.io/mkubaczyk/helmsman
-- Changed CircleCI-based build to Github Actions
+- Updated versions and dependencies

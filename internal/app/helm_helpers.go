@@ -13,6 +13,10 @@ import (
 	"github.com/mkubaczyk/helmsman/internal/gcs"
 )
 
+// TOOD: this is to avoid shelling out multiple times to get the version,
+// we should look for a more elegant solution than using global variables
+var curHelmVersion string
+
 type helmRepo struct {
 	Name string `json:"name"`
 	URL  string `json:"url"`
@@ -73,6 +77,9 @@ func getChartInfo(chartName, chartVersion string) (*ChartInfo, error) {
 
 // getHelmClientVersion returns Helm client Version
 func getHelmVersion() string {
+	if curHelmVersion != "" {
+		return curHelmVersion
+	}
 	cmd := helmCmd([]string{"version", "--short"}, "Checking Helm version")
 
 	res, err := cmd.Exec()
@@ -84,7 +91,9 @@ func getHelmVersion() string {
 	if !strings.HasPrefix(version, "v") {
 		version = strings.SplitN(version, ":", 2)[1]
 	}
-	return strings.TrimSpace(version)
+	curHelmVersion = strings.TrimSpace(version)
+
+	return curHelmVersion
 }
 
 func checkHelmVersion(constraint string) bool {

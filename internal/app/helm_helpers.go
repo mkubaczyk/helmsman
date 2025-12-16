@@ -13,7 +13,7 @@ import (
 	"github.com/mkubaczyk/helmsman/internal/gcs"
 )
 
-// TOOD: this is to avoid shelling out multiple times to get the version,
+// TODO: this is to avoid shelling out multiple times to get the version,
 // we should look for a more elegant solution than using global variables
 var curHelmVersion string
 

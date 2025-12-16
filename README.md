@@ -2,7 +2,7 @@
 
 ![helmsman-logo](docs/images/helmsman.png)
 
-> Helmsman v3.0.0 works only with Helm versions >=3.0.0. For older Helm versions, use Helmsman v1.x
+> Helmsman >=v3.0.0 works only with Helm versions >=3.0.0. For older Helm versions, use Helmsman v1.x
 
 # What is Helmsman?
 
@@ -84,9 +84,9 @@ Check the [releases page](https://github.com/mkubaczyk/helmsman/releases) for th
 
 ```sh
 # on Linux
-curl -L https://github.com/mkubaczyk/helmsman/releases/download/v4.0.1/helmsman_4.0.1_linux_amd64.tar.gz | tar zx
+curl -L https://github.com/mkubaczyk/helmsman/releases/download/v4.0.3/helmsman_4.0.3_linux_amd64.tar.gz | tar zx
 # on MacOS
-curl -L https://github.com/mkubaczyk/helmsman/releases/download/v4.0.1/helmsman_4.0.1_darwin_amd64.tar.gz | tar zx
+curl -L https://github.com/mkubaczyk/helmsman/releases/download/v4.0.3/helmsman_4.0.3_darwin_amd64.tar.gz | tar zx
 
 mv helmsman /usr/local/bin/helmsman
 ```

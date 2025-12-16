@@ -49,7 +49,11 @@ func getHelmReleases(s *State) []helmRelease {
 			var releases []helmRelease
 			var targetReleases []helmRelease
 			defer wg.Done()
-			cmd := helmCmd([]string{"list", "--all", "--max", "0", "--output", "json", "-n", ns}, "Listing all existing releases in [ "+ns+" ] namespace")
+			args := []string{"list", "--max", "0", "--output", "json", "-n", ns}
+			if checkHelmVersion("<4.0.0") {
+				args = append(args, "--all")
+			}
+			cmd := helmCmd(args, "Listing all existing releases in [ "+ns+" ] namespace")
 			res, err := cmd.RetryExec(3)
 			if err != nil {
 				log.Fatal(err.Error())

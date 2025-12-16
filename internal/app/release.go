@@ -409,7 +409,11 @@ func (r *Release) getMaxHistory() []string {
 func (r *Release) getHelmFlags() []string {
 	var flgs []string
 	if flags.forceUpgrades {
-		flgs = append(flgs, "--force")
+		if checkHelmVersion("<4.0.0") {
+			flgs = append(flgs, "--force")
+		} else {
+			flgs = append(flgs, "--force-replace")
+		}
 	}
 
 	if flags.verify {

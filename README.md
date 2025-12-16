@@ -1,4 +1,4 @@
-[![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=v4.0.1&x2=0)](https://github.com/mkubaczyk/helmsman/releases)
+[![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=v4.0.3&x2=0)](https://github.com/mkubaczyk/helmsman/releases)
 
 ![helmsman-logo](docs/images/helmsman.png)
 

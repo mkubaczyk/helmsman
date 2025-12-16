@@ -1,9 +1,9 @@
-# v4.0.2
+# v4.0.3
 
 ## New feature
 
 ## Fixes and improvements
 
-## Changes
+- Support helm v4
 
-- Updated versions and dependencies
+## Changes

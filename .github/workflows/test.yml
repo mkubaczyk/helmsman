@@ -3,8 +3,6 @@ name: Test
 on:
   push:
     branches: [master]
-  pull_request:
-    branches: [master]
   workflow_call:
 
 jobs:
@@ -39,7 +37,9 @@ jobs:
 
       - name: Install Helm plugins
         run: |
-          helm plugin install --verify=false https://github.com/databus23/helm-diff --version v3.12.4
+          VERIFY_FLAG=""
+          [[ "${{ matrix.helm-version }}" == v4* ]] && VERIFY_FLAG="--verify=false"
+          helm plugin install $VERIFY_FLAG https://github.com/databus23/helm-diff --version v3.12.4
 
       - name: Run tests
         run: make test

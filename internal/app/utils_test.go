@@ -246,6 +246,7 @@ func Test_eyamlSecrets(t *testing.T) {
 				s: &Config{
 					EyamlEnabled: true,
 					// https://github.com/voxpupuli/hiera-eyaml/commit/760fd05e7cbb34b5380f87a87290deb790ae0aaf
+					// Public key is only needed for encryption, not decryption
 					EyamlPublicKeyPath:  "./../../tests/keys/invalid_public_key.pkcs7.pem",
 					EyamlPrivateKeyPath: "./../../tests/keys/private_key.pkcs7.pem",
 				},
@@ -257,7 +258,7 @@ func Test_eyamlSecrets(t *testing.T) {
 					SecretsFile: "./../../tests/secrets/valid_eyaml_secrets.yaml",
 				},
 			},
-			want: false,
+			want: true,
 		},
 	}
 	for _, tt := range tests {

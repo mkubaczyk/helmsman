@@ -93,12 +93,26 @@ mv helmsman /usr/local/bin/helmsman
 
 ## As a docker image
 
-```
+Docker images are published to `ghcr.io/mkubaczyk/helmsman` with variants for Helm 3 and Helm 4:
+
+| Tag | Description |
+|-----|-------------|
+| `latest` | Latest release with Helm 4 |
+| `vX.Y.Z` | Specific release with Helm 4 (default) |
+| `vX.Y.Z-helm3` | Specific release with Helm 3 |
+| `vX.Y.Z-helm4` | Specific release with Helm 4 |
+| `vX.Y.Z-v3.19.4` | Specific release with exact Helm version |
+| `vX.Y.Z-v4.0.4` | Specific release with exact Helm version |
+
+```sh
+# Latest with Helm 4 (default)
 docker pull ghcr.io/mkubaczyk/helmsman:latest
-```
-or with specific release
-```
-docker pull ghcr.io/mkubaczyk/helmsman:v4.0.1
+
+# Specific release with Helm 4
+docker pull ghcr.io/mkubaczyk/helmsman:v4.0.3
+
+# Specific release with Helm 3
+docker pull ghcr.io/mkubaczyk/helmsman:v4.0.3-helm3
 ```
 
 ## As a package
@@ -131,7 +145,7 @@ asdf install helmsman latest
 Helmsman can be used in three different settings:
 
 - [As a binary with a hosted cluster](https://github.com/mkubaczyk/helmsman/blob/master/docs/how_to/settings).
-- [As a docker image in a CI system or local machine](https://github.com/mkubaczyk/helmsman/blob/master/docs/how_to/deployments/ci.md) Always use a tagged docker image from [dockerhub](https://hub.docker.com/r/praqma/helmsman/) as the `latest` image can (at times) be unstable.
+- [As a docker image in a CI system or local machine](https://github.com/mkubaczyk/helmsman/blob/master/docs/how_to/deployments/ci.md) Always use a tagged docker image from [GHCR](https://github.com/mkubaczyk/helmsman/pkgs/container/helmsman).
 - [As a docker image inside a k8s cluster](https://github.com/mkubaczyk/helmsman/blob/master/docs/how_to/deployments/inside_k8s.md)
 
 # Contributing

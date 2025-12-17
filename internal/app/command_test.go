@@ -126,9 +126,9 @@ func TestPipeExec(t *testing.T) {
 			name: "echo",
 			input: CmdPipe{
 				Command{
-					Cmd:         "echo",
-					Args:        []string{"-e", `first string\nsecond string\nthird string`},
-					Description: "muliline echo",
+					Cmd:         "printf",
+					Args:        []string{"first string\nsecond string\nthird string"},
+					Description: "multiline printf",
 				},
 			},
 			want: expected{
@@ -140,9 +140,9 @@ func TestPipeExec(t *testing.T) {
 			name: "line count",
 			input: CmdPipe{
 				Command{
-					Cmd:         "echo",
-					Args:        []string{"-e", `first string\nsecond string\nthird string`},
-					Description: "muliline echo",
+					Cmd:         "printf",
+					Args:        []string{"first string\nsecond string\nthird string\n"},
+					Description: "multiline printf",
 				},
 				Command{
 					Cmd:         "wc",
@@ -159,9 +159,9 @@ func TestPipeExec(t *testing.T) {
 			name: "grep",
 			input: CmdPipe{
 				Command{
-					Cmd:         "echo",
-					Args:        []string{"-e", `first string\nsecond string\nthird string`},
-					Description: "muliline echo",
+					Cmd:         "printf",
+					Args:        []string{"first string\nsecond string\nthird string\n"},
+					Description: "multiline printf",
 				},
 				Command{
 					Cmd:         "grep",
@@ -178,9 +178,9 @@ func TestPipeExec(t *testing.T) {
 			name: "grep no matches",
 			input: CmdPipe{
 				Command{
-					Cmd:         "echo",
-					Args:        []string{"-e", `first string\nsecond string\nthird string`},
-					Description: "muliline echo",
+					Cmd:         "printf",
+					Args:        []string{"first string\nsecond string\nthird string\n"},
+					Description: "multiline printf",
 				},
 				Command{
 					Cmd:         "grep",

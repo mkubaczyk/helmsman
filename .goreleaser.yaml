@@ -10,7 +10,7 @@ version: 2
 
 builds:
   - binary: helmsman
-    ldflags: -s -w -X main.build={{.Version}} -extldflags "-static"
+    ldflags: -s -w -X github.com/mkubaczyk/helmsman/internal/app.appVersion={{.Version}} -extldflags "-static"
     flags:
       - -trimpath
     env:

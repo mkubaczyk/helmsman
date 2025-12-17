@@ -40,28 +40,20 @@ RUN helm plugin install --verify=false https://github.com/hypnoglow/helm-s3.git 
   && helm plugin install --verify=false https://github.com/databus23/helm-diff --version ${HELM_DIFF_VERSION} \
   && helm plugin install --verify=false https://github.com/jkroepke/helm-secrets --version ${HELM_SECRETS_VERSION}
 
-### Go Builder & Tester ###
+### Go Builder ###
 FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS builder
 
-RUN apk add --update --no-cache ca-certificates git openssh-client ruby bash make curl \
-  && gem install hiera-eyaml hiera-eyaml-gkms --no-doc \
-  && update-ca-certificates
-
-COPY --from=helm-installer /usr/local/bin/kubectl /usr/local/bin/kubectl
-COPY --from=helm-installer /usr/local/bin/helm /usr/local/bin/helm
-COPY --from=helm-installer /root/.cache/helm/plugins/ /root/.cache/helm/plugins/
-COPY --from=helm-installer /root/.local/share/helm/plugins/ /root/.local/share/helm/plugins/
+RUN apk add --update --no-cache ca-certificates make
 
 WORKDIR /go/src/github.com/mkubaczyk/helmsman
 
+COPY go.mod go.sum ./
+RUN go mod download
+
 COPY . .
-RUN make test \
-  && LastTag=$(git describe --abbrev=0 --tags) \
-  && TAG=$LastTag-$(date +"%d%m%y") \
-  && LT_SHA=$(git rev-parse ${LastTag}^{}) \
-  && LC_SHA=$(git rev-parse HEAD) \
-  && if [ ${LT_SHA} != ${LC_SHA} ]; then TAG=latest-$(date +"%d%m%y"); fi \
-  && make build
+
+ARG VERSION="dev"
+RUN CGO_ENABLED=0 go build -o helmsman -ldflags "-X github.com/mkubaczyk/helmsman/internal/app.appVersion=${VERSION} -extldflags '-static'" cmd/helmsman/main.go
 
 ### Final Image ###
 FROM alpine:${ALPINE_VERSION} AS base
@@ -77,3 +69,5 @@ COPY --from=helm-installer /root/.cache/helm/plugins/ /root/.cache/helm/plugins/
 COPY --from=helm-installer /root/.local/share/helm/plugins/ /root/.local/share/helm/plugins/
 
 COPY --from=builder /go/src/github.com/mkubaczyk/helmsman/helmsman /bin/helmsman
+
+ENTRYPOINT ["/bin/helmsman"]

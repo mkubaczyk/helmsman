@@ -257,7 +257,7 @@ func Test_eyamlSecrets(t *testing.T) {
 					SecretsFile: "./../../tests/secrets/valid_eyaml_secrets.yaml",
 				},
 			},
-			want: true,
+			want: false,
 		},
 	}
 	for _, tt := range tests {

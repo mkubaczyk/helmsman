@@ -40,14 +40,17 @@ Please provide details of the issue, versions of helmsman, helm and kubernetes a
 
 ## Releasing Helmsman
 
-Release is automated from CicrcleCI based on Git tags. [Goreleaser](goreleaser.com) is used to release the binaries and update the release notes on Github while the CircleCI pipeline builds a set of docker images and pushes them to dockerhub.
+Release is automated via GitHub Actions based on Git tags. [Goreleaser](https://goreleaser.com) builds and publishes binaries to GitHub Releases, while the Docker workflow builds and pushes images to GHCR.
 
-The following steps are needed to cut a release (They assume that you are on master and the code is up to date):
+To cut a release:
 
-1. Change the version variable in [main.go](internal/app/main.go) and in [.version](.version)
-2. Update the [release-notes.md](release-notes.md) file with new version and changelog.
-3. Update the installation section in the [README.md](README.md) file to point to the latest version.
-4. (Optional), if new helm versions are required, update the [circleci config](.circleci/config.yml) and add more docker commands.
-5. Commit your changes locally.
-6. Create a git tag with the following command: `git tag -a <semantic version number> -m "<semantic version number>" <your-last-commit-sha>`
-7. Push your commit and tag with `git push --follow-tags`
+1. Create a PR updating [release-notes.md](release-notes.md) with the new version and changelog.
+2. Get approval and merge the PR.
+3. Create and push the tag on the merged commit:
+   ```bash
+   git checkout master && git pull
+   git tag -a vX.Y.Z -m "vX.Y.Z"
+   git push --tags
+   ```
+
+The tag triggers the build pipeline which runs tests, creates the GitHub release with binaries, and pushes the Docker image.

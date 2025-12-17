@@ -61,7 +61,7 @@ update-deps: ## Update depdendencies. Runs `go get -u` internally.
 	@GOFLAGS="" go mod vendor
 
 build: deps vet schema ## Build the package
-	@go build -o helmsman -ldflags '-X main.version="${TAG}-${DATE}" -extldflags "-static"' cmd/helmsman/main.go
+	@go build -o helmsman -ldflags '-X github.com/mkubaczyk/helmsman/internal/app.appVersion="${TAG}-${DATE}" -extldflags "-static"' cmd/helmsman/main.go
 
 generate:
 	@go generate #${PKGS}
@@ -83,7 +83,7 @@ test-%: deps vet repo ## Run a specific unit test
 	@go test -v -cover -p=1 -run $(*) ./... -args -f ../../examples/example.toml
 
 cross: deps ## Create binaries for all OSs
-	@gox -os 'windows linux darwin' -arch 'arm64 amd64' -output "dist/{{.Dir}}_{{.OS}}_{{.Arch}}" -ldflags '-X main.Version=${TAG}-${DATE}' ./...
+	@gox -os 'windows linux darwin' -arch 'arm64 amd64' -output "dist/{{.Dir}}_{{.OS}}_{{.Arch}}" -ldflags '-X github.com/mkubaczyk/helmsman/internal/app.appVersion=${TAG}-${DATE}' ./...
 .PHONY: cross
 
 release: ## Generate a new release
@@ -98,8 +98,8 @@ tools: ## Get extra tools used by this makefile
 
 helmPlugins: ## Install helm plugins used by Helmsman
 	@mkdir -p ~/.helm/plugins
-	@helm plugin install https://github.com/hypnoglow/helm-s3.git
-	@helm plugin install https://github.com/nouney/helm-gcs
-	@helm plugin install https://github.com/databus23/helm-diff
-	@helm plugin install https://github.com/jkroepke/helm-secrets
+	@helm plugin install --verify=false https://github.com/hypnoglow/helm-s3.git
+	@helm plugin install --verify=false https://github.com/nouney/helm-gcs
+	@helm plugin install --verify=false https://github.com/databus23/helm-diff
+	@helm plugin install --verify=false https://github.com/jkroepke/helm-secrets
 .PHONY: helmPlugins

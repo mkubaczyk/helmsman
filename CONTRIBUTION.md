@@ -20,6 +20,19 @@ make test
 
 > Helmsman v1.x supports helm v2.x only and will no longer be supported except for bug fixes and minor changes.
 
+## Commit messages
+
+This project uses [Conventional Commits](https://www.conventionalcommits.org/) to auto-generate release notes.
+
+| Type | Purpose | Example |
+|------|---------|---------|
+| `feat!:` | Breaking change | `feat!: remove deprecated API` |
+| `feat:` | New feature | `feat: add parallel release execution` |
+| `fix:` | Bug fix | `fix: helm 3.x compatibility in Dockerfile` |
+| `chore:` | Build, CI, deps, docs, infra | `chore: update goreleaser config` |
+
+Commits not matching these patterns appear under "Others" in release notes.
+
 ## Submitting pull requests
 
 - If your PR is for Helmsman v1.x, it should target the `1.x` branch.
@@ -40,17 +53,16 @@ Please provide details of the issue, versions of helmsman, helm and kubernetes a
 
 ## Releasing Helmsman
 
-Release is automated via GitHub Actions based on Git tags. [Goreleaser](https://goreleaser.com) builds and publishes binaries to GitHub Releases, while the Docker workflow builds and pushes images to GHCR.
+Release is automated via GitHub Actions based on Git tags. [Goreleaser](https://goreleaser.com) builds and publishes binaries to GitHub Releases, while the Docker workflow builds and pushes images to GHCR. Release notes are auto-generated from commit messages.
 
 To cut a release:
 
-1. Create a PR updating [release-notes.md](release-notes.md) with the new version and changelog.
-2. Get approval and merge the PR.
-3. Create and push the tag on the merged commit:
+1. Ensure commits on master follow the commit message convention.
+2. Create and push the tag:
    ```bash
    git checkout master && git pull
    git tag -a vX.Y.Z -m "vX.Y.Z"
    git push --tags
    ```
 
-The tag triggers the build pipeline which runs tests, creates the GitHub release with binaries, and pushes the Docker image.
+The tag triggers the build pipeline which runs tests, creates the GitHub release with binaries and auto-generated changelog, and pushes the Docker image.

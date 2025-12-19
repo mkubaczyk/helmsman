@@ -19,6 +19,18 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Build mode summary
+        run: |
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            echo "### Release: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+            echo "GoReleaser will **publish** binaries to GitHub Releases." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### Validation build (no release)" >> $GITHUB_STEP_SUMMARY
+            echo "GoReleaser will build artifacts but **skip publishing**." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Tag a version to publish: \`git tag v1.2.3 && git push --tags\`" >> $GITHUB_STEP_SUMMARY
+          fi
+
       - name: Checkout
         uses: actions/checkout@v6
         with:
@@ -56,6 +68,16 @@ jobs:
       attestations: write
       id-token: write
     steps:
+      - name: Build mode summary
+        run: |
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            echo "### Docker: ${{ matrix.helm-major }} (${{ matrix.helm-version }})" >> $GITHUB_STEP_SUMMARY
+            echo "Image will be **pushed** to ghcr.io/${{ github.repository }}." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### Docker: ${{ matrix.helm-major }} (${{ matrix.helm-version }}) - validation only" >> $GITHUB_STEP_SUMMARY
+            echo "Image will be built but **not pushed**." >> $GITHUB_STEP_SUMMARY
+          fi
+
       - name: Checkout repository
         uses: actions/checkout@v6
         with:

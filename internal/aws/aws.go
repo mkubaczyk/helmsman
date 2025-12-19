@@ -15,27 +15,9 @@ import (
 // colorizer
 var style aurora.Aurora
 
-func checkCredentialsEnvVar() bool {
-	if os.Getenv("AWS_ACCESS_KEY_ID") == "" || os.Getenv("AWS_SECRET_ACCESS_KEY") == "" {
-		return false
-	} else if os.Getenv("AWS_REGION") == "" {
-
-		if os.Getenv("AWS_DEFAULT_REGION") == "" {
-			return false
-		}
-		os.Setenv("AWS_REGION", os.Getenv("AWS_DEFAULT_REGION"))
-
-	}
-	return true
-}
-
 // ReadFile reads a file from S3 bucket and saves it in a desired location.
 func ReadFile(bucketName string, filename string, outFile string, noColors bool) {
 	style = aurora.NewAurora(!noColors)
-	// Checking env vars are set to configure AWS
-	if !checkCredentialsEnvVar() {
-		log.Println("WARN: Failed to find the AWS env vars needed to configure AWS. Please make sure they are set in the environment.")
-	}
 
 	// Create Session -- use config (credentials + region) from env vars or aws profile
 	sess, err := session.NewSession()
@@ -67,11 +49,6 @@ func ReadFile(bucketName string, filename string, outFile string, noColors bool)
 // ReadSSMParam reads a value from an SSM Parameter
 func ReadSSMParam(keyname string, withDecryption bool, noColors bool) string {
 	style = aurora.NewAurora(!noColors)
-
-	// Checking env vars are set to configure AWS
-	if !checkCredentialsEnvVar() {
-		log.Println("WARN: Failed to find the AWS env vars needed to configure AWS. Please make sure they are set in the environment.")
-	}
 
 	// Create Session -- use config (credentials + region) from env vars or aws profile
 	sess, err := session.NewSession()

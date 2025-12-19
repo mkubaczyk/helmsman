@@ -23,3 +23,22 @@ builds:
       - amd64
       - arm64
     main: ./cmd/helmsman/main.go
+
+changelog:
+  use: github
+  sort: asc
+  groups:
+    - title: Breaking Changes
+      regexp: '^.*?(\w+)(\(.+\))?!:.*$'
+      order: 0
+    - title: Features
+      regexp: '^.*?feat(\(.+\))?:.*$'
+      order: 1
+    - title: Fixes
+      regexp: '^.*?fix(\(.+\))?:.*$'
+      order: 2
+    - title: Chore
+      regexp: '^.*?(chore|docs)(\(.+\))?:.*$'
+      order: 3
+    - title: Others
+      order: 4

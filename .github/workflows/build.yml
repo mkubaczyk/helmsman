@@ -9,7 +9,19 @@ on:
     branches: [master]
 
 jobs:
+  commitlint:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: wagoid/commitlint-github-action@v6
+
   test:
+    needs: commitlint
+    if: always() && (needs.commitlint.result == 'success' || needs.commitlint.result == 'skipped')
     uses: ./.github/workflows/test.yml
 
   goreleaser:
@@ -46,7 +58,7 @@ jobs:
         with:
           distribution: goreleaser
           version: '~> v2'
-          args: release ${{ github.ref_type != 'tag' && '--skip=publish,validate' || '' }} --release-notes release-notes.md
+          args: release ${{ github.ref_type != 'tag' && '--skip=publish,validate' || '' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

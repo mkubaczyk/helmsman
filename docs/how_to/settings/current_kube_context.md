@@ -1,7 +1,3 @@
----
-version: v1.8.0
----
-
 # Cluster connection -- Using the current kube context
 
 Helmsman can use the current configured kube context. In this case, the `kubeContext` field in the `settings` stanza needs to be left empty. If no other `settings` fields are needed, you can delete the whole `settings` stanza.

@@ -1,7 +1,3 @@
----
-version: v1.8.0
----
-
 # Create namespaces
 
 You can define namespaces to be used in your cluster. If they don't exist, Helmsman will create them for you.

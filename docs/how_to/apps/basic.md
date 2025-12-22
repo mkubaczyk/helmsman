@@ -1,7 +1,3 @@
----
-version: v3.0.0-beta5
----
-
 # Basics
 
 ## Install releases
@@ -35,7 +31,7 @@ You can then change your desire, for example to disable the Jenkins release that
 
 Then run Helmsman again and it will detect that you want to delete Jenkins:
 
-> Note: As of v1.4.0-rc, deleting the jenkins app entry in the desired state file WILL result in deleting the jenkins release. To prevent this, use the `--keep-untracked-releases` flag with your Helmsman command.
+> Note: Deleting an app entry in the desired state file WILL result in deleting the release. To prevent this, use the `--keep-untracked-releases` flag with your Helmsman command.
 
 ```shell
 $ helmsman --apply -f example.toml
@@ -74,7 +70,6 @@ apps:
 
 # Rollback releases
 
-> Rollbacks in helm versions 2.8.2 and higher may not work due to a [bug](https://github.com/helm/helm/issues/3722).
 Similarly, if you change `enabled` back to `true`, it will figure out that you would like to roll it back.
 
 ```shell

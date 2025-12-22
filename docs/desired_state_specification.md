@@ -1,7 +1,3 @@
----
-version: v3.8.2
----
-
 # Helmsman desired state specification
 
 This document describes the specification for how to write your Helm charts' desired state file. This can be either a [Toml](https://github.com/toml-lang/toml) or [Yaml](http://yaml.org/) formatted file. The desired state file consists of:
@@ -16,7 +12,7 @@ This document describes the specification for how to write your Helm charts' des
 
 > You can use environment variables in the desired state files. The environment variable name should start with "$", or encapsulated in "${", "}". "$" characters can be escaped like "$$".
 
-> Starting from v1.9.0, you can also use environment variables in your helm values/secrets files.
+> You can also use environment variables in your helm values/secrets files.
 
 ## Metadata
 
@@ -250,9 +246,7 @@ Optional : Yes.
 
 Synopsis: defines the Helm repos where your charts can be found. You can add as many repos as you need. Public repos can be added without any additional setup. Private repos require authentication.
 
-> As of version v0.2.0, both AWS S3 and Google GCS buckets can be used for private repos (using the [Helm S3](https://github.com/hypnoglow/helm-s3) and [Helm GCS](https://github.com/nouney/helm-gcs) plugins).
-
-> As of version v1.8.0, you can use private repos with basic auth and you can use pre-configured helm repos.
+> AWS S3 and Google GCS buckets can be used for private repos (using the [Helm S3](https://github.com/hypnoglow/helm-s3) and [Helm GCS](https://github.com/nouney/helm-gcs) plugins). You can also use private repos with basic auth and pre-configured helm repos.
 
 Authenticating to private cloud helm repos:
 
@@ -392,8 +386,8 @@ Options:
 - **timeout**       : helm timeout in seconds. Default 300 seconds.
 - **noHooks**       : helm noHooks option. If true, it will disable pre/post upgrade hooks. Default is false.
 - **priority**      : defines the priority of applying operations on this release. Only negative values allowed and the lower the value, the higher the priority. Default priority is 0. Apps with equal priorities will be applied in the order they were added in your state file (DSF).
-- **set**           : is used to override certain values from values.yaml with values from environment variables (or, starting from v1.3.0-rc, directly provided in the Desired State File). This is particularly useful for passing secrets to charts. If an environment variable with the same name as the provided value exists, the environment variable value will be used, otherwise, the provided value will be used as-is. The TOML stanza for this is `[apps.<app_name>.set]`
-- **setString**     : is used to override String values from values.yaml or chart's defaults. This uses the `--set-string` flag in helm which is available only in helm >v2.9.0. This option is useful for image tags and the like. The TOML stanza for this is `[apps.<app_name>.setString]`
+- **set**           : is used to override certain values from values.yaml with values from environment variables or directly provided in the Desired State File. This is particularly useful for passing secrets to charts. If an environment variable with the same name as the provided value exists, the environment variable value will be used, otherwise, the provided value will be used as-is. The TOML stanza for this is `[apps.<app_name>.set]`
+- **setString**     : is used to override String values from values.yaml or chart's defaults. This uses the `--set-string` flag in helm. This option is useful for image tags and the like. The TOML stanza for this is `[apps.<app_name>.setString]`
 - **setFile**       : is used to override values from values.yaml or chart's defaults from provided file. This uses the `--set-file` flag in helm. This option is useful for embedding file contents in the values. The TOML stanza for this is `[apps.<app_name>.setFile]`
   > set, setString and setFile can't take nested elements. If you need to provide nested values, you can combine them in one line with dots e.g. `TOML: "image.tag"=some\_value` `YAML: "image.tag": some\_value`
 - **helmFlags**     : array of `helm upgrade` flags, is used to pass flags to helm install/upgrade commands. **These flags are not passed to helm diff**. For setting values, use **set**, **setString** or **setFile** instead.
@@ -401,7 +395,7 @@ Options:
     > helmDiffFlags can be useful for example if you need to use the `--disable-openapi-validation` flag, in that case you would need to set it both in helmFlags and helmDiffFlags
 - **hooks** : defines global lifecycle hooks to apply yaml manifest before and/or after different helmsman operations. Check [here](how_to/apps/lifecycle_hooks.md) for more details. Unset hooks for a release are inherited from `globalHooks` in the [settings](#Settings) stanza.
 - **maxHistory**    : defines the maximum number of helm revisions state (secrets/configmap) to keep. If unset, it will inherit the value of `settings.globalMaxHistory`, if that's also unset, it defaults to 10.
-- **postRenderer**  : the path to an executable to be used for post rendering (requires Helm 3.1+ and helm-diff v3.1.2+)
+- **postRenderer**  : for Helm 3, the path to an executable to be used for post rendering. For Helm 4, this must be a plugin name (post-renderers are now plugins in Helm 4). Requires helm-diff v3.1.2+.
 
 Example:
 
@@ -425,7 +419,7 @@ Example:
     wait = true
     priority = -3
     helmFlags = [
-      "--recreate-pods",
+      "--timeout=600s",
     ]
   [apps.jenkins.set]
     secret1="$SECRET_ENV_VAR1"
@@ -458,7 +452,7 @@ apps:
     wait: true
     priority: -3
     helmFlags: [
-      "--recreate-pods",
+      "--timeout=600s",
     ]
     set:
       secret1: "$SECRET_ENV_VAR1"

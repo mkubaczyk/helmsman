@@ -1,14 +1,12 @@
 ---
-version: v3.0.0-beta5
+version: v4.0.0
 ---
 
-# Default helm repos
+# Helm repos
 
-Helm v3 no longer adds the `stable` and `incubator` repos by default. Up to Helmsman v3.0.0-beta5, Helmsman adds these two repos by default. And you can disable the automatic addition of these two repos, use the `--no-default-repos` flag.
+Helm does not add any repos by default. You must explicitly define all repos you want to use.
 
-Starting from `v3.0.0-beta6`, Helmsman complies with the Helm v3 behavior and DOES NOT add `stable` nor `incubator` by default. The `--no-default-repos` is also deprecated.
-
-This example would have only the `custom` repo defined explicitly:
+This example defines a custom repo:
 
 ```toml
 [helmRepos]
@@ -20,34 +18,29 @@ helmRepos:
   custom: "https://mycustomrepo.org"
 ```
 
-This example would have `stable` defined with a custom repo:
+You can name your repos however you like. The name is used to reference charts from that repo:
 
 ```toml
 #...
 [helmRepos]
-stable = "https://mycustomstablerepo.com"
+  bitnami = "https://charts.bitnami.com/bitnami"
+  grafana = "https://grafana.github.io/helm-charts"
 #...
 ```
 
 ```yaml
 # ...
 helmRepos:
-  stable: "https://mycustomstablerepo.com"
+  bitnami: "https://charts.bitnami.com/bitnami"
+  grafana: "https://grafana.github.io/helm-charts"
 # ...
 ```
 
-This example would have `stable` defined with a Google deprecated stable repo:
-
-```toml
-#...
-[helmRepos]
-stable = "https://kubernetes-charts.storage.googleapis.com"
-#...
-```
+Then reference charts using `repoName/chartName` format:
 
 ```yaml
-# ...
-helmRepos:
-  stable: "https://kubernetes-charts.storage.googleapis.com"
-# ...
+apps:
+  my-app:
+    chart: "bitnami/nginx"
+    version: "15.0.0"
 ```

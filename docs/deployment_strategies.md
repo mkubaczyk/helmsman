@@ -1,7 +1,3 @@
----
-version: v3.0.0-beta5
----
-
 # Deployment Strategies
 
 This document describes the different strategies to use Helmsman for maintaining your helm charts deployment to k8s clusters.
@@ -125,7 +121,7 @@ If you are developing your own applications/services and packaging them in helm 
 
 Often, you would have multiple apps developed in separate source code repositories but you would like to test their deployment in the same cluster/namespace. In that case, Helmsman can be used [as part of your CI pipeline](how_to/deployments/ci.md) as described in the diagram below:
 
-> as of v1.1.0 , you can use the `ns-override`flag to force helmsman to deploy/move all apps into a given namespace. For example, you could use this flag in a CI job that gets triggered on commits to the dev branch to deploy all apps into the `staging` namespace.
+> You can use the `ns-override` flag to force helmsman to deploy/move all apps into a given namespace. For example, you could use this flag in a CI job that gets triggered on commits to the dev branch to deploy all apps into the `staging` namespace.
 
 ![multi-DSF](images/multi-DSF.png)
 
@@ -135,12 +131,12 @@ If you need supporting applications (charts) for your application (e.g, reverse 
 
 ## Notes on using multiple Helmsman desired state files for the same cluster
 
-Helmsman v3.0.0-beta5 introduces the `context` stanza.
+Helmsman uses the `context` stanza to manage multiple DSFs.
 When having multiple DSFs operating on different releases, it is essential to use the `context` stanza in each DSF to define what context the DSF covers. The user-provided value for `context` is used by Helmsman to label and distinguish which DSF manages which deployed releases in the cluster. This way, each helmsman operation will only operate on releases within the context defined in the DSF.
 
 When having multiple DSFs be aware of the following:
 
-- If no context is provided in the DSF (or merged DSFs), `default` is applied as a default context. This means any set of DSFs that don't define custom contexts can still operate on each other's releases (same behavior as in Helmsman 1.x).
+- If no context is provided in the DSF (or merged DSFs), `default` is applied as a default context. This means any set of DSFs that don't define custom contexts can still operate on each other's releases.
 
   - If you don't define context in your DSFs, you would need to use the `--keep-untracked-releases` flag to avoid different DSFs deleting each other's releases.
 

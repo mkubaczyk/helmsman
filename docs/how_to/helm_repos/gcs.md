@@ -1,7 +1,3 @@
----
-version: v1.8.0
----
-
 # Using private helm repos in GCS
 
 Helmsman allows you to use private charts from private repos. Currently only repos hosted in S3 or GCS buckets are supported for private repos.

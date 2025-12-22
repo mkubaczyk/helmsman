@@ -1,5 +1,5 @@
 ## This is a minimal example.
-## It will use your current kube context and will deploy Tiller without RBAC service account.
+## It will use your current kube context.
 ## For the full config spec and options, check https://github.com/mkubaczyk/helmsman/blob/master/docs/desired_state_specification.md
 
 apps:

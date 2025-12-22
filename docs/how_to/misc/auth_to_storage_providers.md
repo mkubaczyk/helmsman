@@ -1,10 +1,6 @@
----
-version: v1.8.0
----
-
 # Authenticating to cloud storage providers
 
-Helmsman can read files like certificates for connecting to the cluster or TLS certificates for communicating with Tiller from some cloud storage providers; namely: GCS, S3 and Azure blob storage. Below is the authentication requirement for each provider:
+Helmsman can read files like certificates for connecting to the cluster from cloud storage providers: GCS, S3 and Azure blob storage. Below is the authentication requirement for each provider:
 
 ## AWS S3
 

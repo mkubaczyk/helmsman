@@ -1,7 +1,3 @@
----
-version: v1.3.0-rc
----
-
 # Use local helm charts
 
 You can use your locally developed charts.

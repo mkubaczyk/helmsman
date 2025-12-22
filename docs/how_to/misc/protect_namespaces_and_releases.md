@@ -1,12 +1,8 @@
----
-version: v1.3.0-rc
----
-
 # Namespace and Release Protection
 
 Since helmsman is used with version controlled code and is often configured to be triggered as part of a CI pipeline, accidental mistakes could happen by the user (e.g, disabling a production application and taking out of service as a result of a mistaken change in the desired state file).
 
-As of version v1.0.0, helmsman provides a fine-grained mechanism to protect releases/namespaces from accidental desired state file changes.
+Helmsman provides a fine-grained mechanism to protect releases/namespaces from accidental desired state file changes.
 
 ## Protection definition
 

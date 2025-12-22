@@ -1,10 +1,6 @@
----
-version: v3.0.0-beta5
----
-
 # Supply multiple desired state files
 
-Starting from v1.5.0, Helmsman allows you to pass the `-f` flag multiple times to specify multiple desired state files
+Helmsman allows you to pass the `-f` flag multiple times to specify multiple desired state files
 that should be merged. This allows us to do things like specify our non-environment-specific config in a `common.toml` file
 and environment specific info in a `nonprod.toml` or `prod.toml` file. This process uses [this library](https://github.com/imdario/mergo)
 to do the merging, and is subject to the limitations described there.
@@ -20,7 +16,6 @@ maintainer = "project-owners@example.com"
 description = "Project charts"
 
 [settings]
-serviceAccount = "tiller"
 storageBackend = "secret"
 ...
 ```
@@ -103,7 +98,7 @@ apps:
 
 ### Limitations
 
-* If no context is provided in DSF (or merged DSFs), `default` is applied as a default context. This means any set of DSFs that don't define custom contexts can still operate on each other's releases (same behavior as in Helmsman 1.x).
+* If no context is provided in DSF (or merged DSFs), `default` is applied as a default context. This means any set of DSFs that don't define custom contexts can still operate on each other's releases.
 
 * When merging multiple DSFs, context from the firs DSF in the list gets overridden by the context in the last DSF.
 

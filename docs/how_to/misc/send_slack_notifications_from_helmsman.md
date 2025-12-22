@@ -1,10 +1,6 @@
----
-version: v1.5.0
----
-
 # Slack notifications from Helmsman
 
-Starting from v1.4.0-rc, Helmsman can send slack notifications to a channel of your choice. To enable the notifications, simply add a `slack webhook` in the `settings` section of your desired state file. The webhook URL can be passed directly or from an environment variable.
+Helmsman can send slack notifications to a channel of your choice. To enable the notifications, simply add a `slack webhook` in the `settings` section of your desired state file. The webhook URL can be passed directly or from an environment variable.
 
 ```toml
 [settings]

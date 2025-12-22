@@ -1,10 +1,6 @@
----
-version: v1.13.0
----
-
 # Limit execution to explicitly defined group of apps
 
-Starting from v1.13.0, Helmsman allows you to pass the `--group` flag to specify group of apps
+Helmsman allows you to pass the `--group` flag to specify group of apps
 the execution of Helmsman deployment will be limited to.
 Thanks to this one can deploy specific applications among all defined for an environment.
 

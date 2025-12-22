@@ -1,10 +1,6 @@
----
-version: v1.9.0
----
-
 # Limit execution to explicitly defined apps
 
-Starting from v1.9.0, Helmsman allows you to pass the `--target` flag multiple times to specify multiple apps
+Helmsman allows you to pass the `--target` flag multiple times to specify multiple apps
 that limits apps considered by Helmsman during this specific execution.
 Thanks to this one can deploy specific applications among all defined for an environment.
 

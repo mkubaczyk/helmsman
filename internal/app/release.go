@@ -158,7 +158,7 @@ func (r *Release) test(afterCommands *[]hookCmd) {
 	*afterCommands = append([]hookCmd{{Command: cmd, Type: test}}, *afterCommands...)
 }
 
-// installRelease creates a Helm command to install a particular release in a particular namespace using a particular Tiller.
+// installRelease creates a Helm command to install a particular release in a particular namespace.
 func (r *Release) install(p *plan) {
 	before, after := r.checkHooks("install")
 

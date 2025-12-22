@@ -2,6 +2,13 @@ name: Test
 
 on:
   workflow_call:
+    inputs:
+      helm3-version:
+        required: true
+        type: string
+      helm4-version:
+        required: true
+        type: string
 
 jobs:
   test:
@@ -9,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        helm-version: ['v3.19.4', 'v4.0.4']
+        helm-version: ['${{ inputs.helm3-version }}', '${{ inputs.helm4-version }}']
     steps:
       - name: Checkout
         uses: actions/checkout@v6

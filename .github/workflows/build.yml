@@ -20,12 +20,6 @@ jobs:
       - uses: wagoid/commitlint-github-action@v6
 
   test:
-    needs: commitlint
-    if: |
-      always() && (
-        github.event_name != 'pull_request' ||
-        needs.commitlint.result == 'success'
-      )
     uses: ./.github/workflows/test.yml
 
   goreleaser:

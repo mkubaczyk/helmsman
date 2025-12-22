@@ -66,10 +66,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - helm-version: 'v3.19.4'
+          - helm-version: '3.19.4'
             helm-major: 'helm3'
             default: false
-          - helm-version: 'v4.0.4'
+          - helm-version: '4.0.4'
             helm-major: 'helm4'
             default: true
     permissions:
@@ -110,7 +110,7 @@ jobs:
           tags: |
             type=semver,pattern=v{{version}},enable=${{ matrix.default }}
             type=semver,pattern=v{{version}},suffix=-${{ matrix.helm-major }}
-            type=semver,pattern=v{{version}},suffix=-${{ matrix.helm-version }}
+            type=semver,pattern=v{{version}},suffix=-helm${{ matrix.helm-version }}
             type=ref,event=pr,suffix=-${{ matrix.helm-major }}
 
       - name: Build and push Docker image
@@ -122,4 +122,4 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             VERSION=${{ github.ref_type == 'tag' && github.ref_name || 'latest' }}
-            GLOBAL_HELM_VERSION=${{ matrix.helm-version }}
+            GLOBAL_HELM_VERSION=v${{ matrix.helm-version }}

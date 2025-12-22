@@ -21,7 +21,11 @@ jobs:
 
   test:
     needs: commitlint
-    if: always() && (needs.commitlint.result == 'success' || needs.commitlint.result == 'skipped')
+    if: |
+      always() && (
+        github.event_name != 'pull_request' ||
+        needs.commitlint.result == 'success'
+      )
     uses: ./.github/workflows/test.yml
 
   goreleaser:

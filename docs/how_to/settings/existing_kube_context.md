@@ -1,7 +1,3 @@
----
-version: v1.8.0
----
-
 # Cluster connection -- Using an existing kube context
 
 Helmsman can use any predefined kube context in the environment. All you need to do is set the context name in the `settings` stanza.

@@ -1,7 +1,3 @@
----
-version: v1.8.0
----
-
 # Cluster connection -- creating the kube context with certificates
 
 Helmsman can create the kube context for you (i.e. establish connection to your cluster). This guide describe how its done with certificates. If you want to use bearer tokens, check [this guide](creating_kube_context_with_token.md).

@@ -1,7 +1,3 @@
----
-version: v1.8.0
----
-
 # Running Helmsman inside your k8s cluster
 
 Helmsman can be deployed inside your k8s cluster and can talk to the k8s API using a `bearer token`.
@@ -45,7 +41,7 @@ To deploy Helmsman into a k8s cluster, few steps are needed:
     This command gives an interactive session:
 
     ```shell
-    kubectl run helmsman --restart Never --image praqma/helmsman --serviceaccount=helmsman -- helmsman -f -- sleep 3600
+    kubectl run helmsman --restart Never --image ghcr.io/mkubaczyk/helmsman:latest --serviceaccount=helmsman -- helmsman -f -- sleep 3600
     ```
 
     But you can also create a proper kubernetes deployment and mount a volume to it containing your desired state file(s).

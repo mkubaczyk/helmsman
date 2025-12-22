@@ -1,7 +1,3 @@
----
-version: v1.8.0
----
-
 # Using private helm repos with basic auth
 
 Helmsman allows you to use any private helm repo hosting which supports basic auth (e.g. Artifactory).

@@ -21,10 +21,6 @@
           "type": "string",
           "description": "ClusterURI is the URI for your cluster API or the name of an environment variable (starting with `$`) containing the URI"
         },
-        "serviceAccount": {
-          "type": "string",
-          "description": "ServiceAccount to be used for tiller (deprecated)"
-        },
         "storageBackend": {
           "type": "string",
           "description": "StorageBackend indicates the storage backened used by helm, defaults to secret"

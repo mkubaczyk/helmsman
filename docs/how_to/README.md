@@ -5,8 +5,6 @@ This page contains a list of guides on how to use Helmsman.
 
 It is recommended that you also check the [DSF spec](../desired_state_specification.md), [cmd reference](../cmd_reference.md), and the [best practice guide](../best_practice.md).
 
-- [Migrating from Helm 2 (Helmsman v1.x) to Helm 3 (Helmsman v3.x)](misc/migrate_to_3.md)
-
 - Connecting to Kubernetes clusters
   - [Using an existing kube context](settings/existing_kube_context.md)
   - [Using the current kube context](settings/current_kube_context.md)

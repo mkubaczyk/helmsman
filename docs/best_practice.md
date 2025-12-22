@@ -1,7 +1,3 @@
----
-version: v3.0.0-beta5
----
-
 # Best Practice
 
 When using Helmsman, we recommend the following best practices:
@@ -15,7 +11,7 @@ When using Helmsman, we recommend the following best practices:
 
 - Do not store secrets in your DSFs! Use one of [the supported ways to pass secrets to your releases](how_to/apps/secrets.md).
 
-- To protect against accidental operations, define certain namespaces (e.g, production) as protected namespaces (supported in v1.0.0+) and deploy your production-ready releases there.
+- To protect against accidental operations, define certain namespaces (e.g, production) as protected namespaces and deploy your production-ready releases there.
 
 - If you use multiple desired state files (DSFs) with the same cluster, make sure your namespace protection definitions are identical across all DSFs.
 

@@ -1,7 +1,3 @@
----
-version: v1.8.0
----
-
 # Using pre-configured helm repos
 
 The primary use-case is if you have some helm repositories that require HTTP basic authentication and you don't want to store the password in the desired state file or as an environment variable. In this case you can execute the following sequence to have those repositories configured:

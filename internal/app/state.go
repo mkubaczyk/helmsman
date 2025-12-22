@@ -20,8 +20,6 @@ type Config struct {
 	Password string `json:"password,omitempty"`
 	// ClusterURI is the URI for your cluster API or the name of an environment variable (starting with `$`) containing the URI
 	ClusterURI string `json:"clusterURI,omitempty"`
-	// ServiceAccount to be used for tiller (deprecated)
-	ServiceAccount string `json:"serviceAccount,omitempty"`
 	// StorageBackend indicates the storage backened used by helm, defaults to secret
 	StorageBackend string `json:"storageBackend,omitempty"`
 	// SlackWebhook is the slack webhook URL for slack notifications

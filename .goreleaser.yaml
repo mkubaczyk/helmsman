@@ -24,6 +24,26 @@ builds:
       - arm64
     main: ./cmd/helmsman/main.go
 
+release:
+  footer: |
+    ## Docker Images
+
+    ### Helm 4 (Recommended)
+    Default build with Helm v{{ .Env.HELM4_VERSION }}:
+    ```
+    docker pull ghcr.io/mkubaczyk/helmsman:latest
+    docker pull ghcr.io/mkubaczyk/helmsman:{{ .Tag }}
+    docker pull ghcr.io/mkubaczyk/helmsman:{{ .Tag }}-helm4
+    docker pull ghcr.io/mkubaczyk/helmsman:{{ .Tag }}-helm{{ .Env.HELM4_VERSION }}
+    ```
+
+    ### Helm 3
+    Build with Helm v{{ .Env.HELM3_VERSION }}:
+    ```
+    docker pull ghcr.io/mkubaczyk/helmsman:{{ .Tag }}-helm3
+    docker pull ghcr.io/mkubaczyk/helmsman:{{ .Tag }}-helm{{ .Env.HELM3_VERSION }}
+    ```
+
 changelog:
   use: github
   sort: asc

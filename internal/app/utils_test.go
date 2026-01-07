@@ -285,3 +285,56 @@ func Test_eyamlSecrets(t *testing.T) {
 		})
 	}
 }
+
+func Test_checkVersion(t *testing.T) {
+	tests := []struct {
+		name       string
+		version    string
+		constraint string
+		want       bool
+	}{
+		{
+			name:       "helm 4.0.0 matches >=4.0.0",
+			version:    "v4.0.0",
+			constraint: ">=4.0.0",
+			want:       true,
+		},
+		{
+			name:       "helm 4.1.0 matches >=4.0.0",
+			version:    "v4.1.0",
+			constraint: ">=4.0.0",
+			want:       true,
+		},
+		{
+			name:       "helm 3.14.0 does not match >=4.0.0",
+			version:    "v3.14.0",
+			constraint: ">=4.0.0",
+			want:       false,
+		},
+		{
+			name:       "helm 3.99.99 does not match >=4.0.0",
+			version:    "v3.99.99",
+			constraint: ">=4.0.0",
+			want:       false,
+		},
+		{
+			name:       "helm 4.0.0 does not match <4.0.0",
+			version:    "v4.0.0",
+			constraint: "<4.0.0",
+			want:       false,
+		},
+		{
+			name:       "helm 3.14.0 matches <4.0.0",
+			version:    "v3.14.0",
+			constraint: "<4.0.0",
+			want:       true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := checkVersion(tt.version, tt.constraint); got != tt.want {
+				t.Errorf("checkVersion(%s, %s) = %v, want %v", tt.version, tt.constraint, got, tt.want)
+			}
+		})
+	}
+}

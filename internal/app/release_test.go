@@ -566,3 +566,73 @@ func Test_release_getChartVersion(t *testing.T) {
 		})
 	}
 }
+
+ func Test_release_getDiffArgs(t *testing.T) {
+	// Save original values to restore after test
+	originalHelmVersion := curHelmVersion
+	originalFlags := flags
+	defer func() {
+		curHelmVersion = originalHelmVersion
+		flags = originalFlags
+	}()
+
+	r := &Release{
+		Name:      "test-release",
+		Namespace: "test-ns",
+		Chart:     "repo/chart",
+		Version:   "1.0.0",
+	}
+
+	tests := []struct {
+		name        string
+		helmVersion string
+		wantFlag    string
+		shouldHave  bool
+	}{
+		{
+			name:        "helm 4.0.0 should have --dry-run=server",
+			helmVersion: "v4.0.0",
+			wantFlag:    "--dry-run=server",
+			shouldHave:  true,
+		},
+		{
+			name:        "helm 4.1.0 should have --dry-run=server",
+			helmVersion: "v4.1.0",
+			wantFlag:    "--dry-run=server",
+			shouldHave:  true,
+		},
+		{
+			name:        "helm 3.14.0 should not have --dry-run=server",
+			helmVersion: "v3.14.0",
+			wantFlag:    "--dry-run=server",
+			shouldHave:  false,
+		},
+		{
+			name:        "helm 3.99.99 should not have --dry-run=server",
+			helmVersion: "v3.99.99",
+			wantFlag:    "--dry-run=server",
+			shouldHave:  false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			curHelmVersion = tt.helmVersion
+			flags = cli{}
+
+			args := r.getDiffArgs()
+			hasFlag := false
+			for _, arg := range args {
+				if arg == tt.wantFlag {
+					hasFlag = true
+					break
+				}
+			}
+
+			if hasFlag != tt.shouldHave {
+				t.Errorf("getDiffArgs() with helm %s: got flag %s present=%v, want present=%v. Args: %v",
+					tt.helmVersion, tt.wantFlag, hasFlag, tt.shouldHave, args)
+			}
+		})
+	}
+}

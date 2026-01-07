@@ -187,29 +187,32 @@ func (r *Release) uninstall(p *plan, optionalNamespace ...string) {
 	p.addCommand(cmd, priority, r, before, after)
 }
 
+// getDiffArgs returns the helm arguments for diffing a release
+func (r *Release) getDiffArgs() []string {
+	if flags.kubectlDiff {
+		return r.getHelmArgsFor("template")
+	}
+	args := []string{"diff"}
+	if !flags.showSecrets {
+		args = append(args, "--suppress-secrets")
+	}
+	if flags.noColors {
+		args = append(args, "--no-color")
+	}
+	if flags.diffContext != -1 {
+		args = append(args, "--context", strconv.Itoa(flags.diffContext))
+	}
+	if checkHelmVersion(">=4.0.0") {
+		args = append(args, "--dry-run=server")
+	}
+	return concat(args, r.getHelmArgsFor("diff"))
+}
+
 // diffRelease diffs an existing release with the specified values.yaml
 func (r *Release) diff() (string, error) {
-	var (
-		args        []string
-		maxExitCode int
-	)
+	var maxExitCode int
 
-	if !flags.kubectlDiff {
-		args = []string{"diff"}
-		if !flags.showSecrets {
-			args = append(args, "--suppress-secrets")
-		}
-		if flags.noColors {
-			args = append(args, "--no-color")
-		}
-		if flags.diffContext != -1 {
-			args = append(args, "--context", strconv.Itoa(flags.diffContext))
-		}
-		args = concat(args, r.getHelmArgsFor("diff"))
-	} else {
-		args = r.getHelmArgsFor("template")
-	}
-
+	args := r.getDiffArgs()
 	desc := "Diffing release [ " + r.Name + " ] in namespace [ " + r.Namespace + " ]"
 	cmd := CmdPipe{helmCmd(args, desc)}
 

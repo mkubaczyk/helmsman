@@ -83,13 +83,18 @@ If you use private helm repos, you will need either `helm-gcs` or `helm-s3` plug
 Check the [releases page](https://github.com/mkubaczyk/helmsman/releases) for the different versions.
 
 ```sh
+# Set desired version (see latest release link below)
+VERSION="4.0.5"
+
 # on Linux
-curl -L https://github.com/mkubaczyk/helmsman/releases/download/v4.0.3/helmsman_4.0.3_linux_amd64.tar.gz | tar zx
+curl -L https://github.com/mkubaczyk/helmsman/releases/download/v${VERSION}/helmsman_${VERSION}_linux_amd64.tar.gz | tar zx
 # on MacOS
-curl -L https://github.com/mkubaczyk/helmsman/releases/download/v4.0.3/helmsman_4.0.3_darwin_amd64.tar.gz | tar zx
+curl -L https://github.com/mkubaczyk/helmsman/releases/download/v${VERSION}/helmsman_${VERSION}_darwin_amd64.tar.gz | tar zx
 
 mv helmsman /usr/local/bin/helmsman
 ```
+
+See the [latest release](https://github.com/mkubaczyk/helmsman/releases/latest) for current version.
 
 ## As a docker image
 
@@ -98,22 +103,23 @@ Docker images are published to `ghcr.io/mkubaczyk/helmsman` with variants for He
 | Tag | Description |
 |-----|-------------|
 | `latest` | Latest release with Helm 4 |
-| `vX.Y.Z` | Specific release with Helm 4 (default) |
-| `vX.Y.Z-helm3` | Specific release with Helm 3 |
-| `vX.Y.Z-helm4` | Specific release with Helm 4 |
-| `vX.Y.Z-v3.19.4` | Specific release with exact Helm version |
-| `vX.Y.Z-v4.0.4` | Specific release with exact Helm version |
+| `<version>` | Specific release with Helm 4 (default) |
+| `<version>-helm3` | Specific release with Helm 3 |
+| `<version>-helm4` | Specific release with Helm 4 |
+| `<version>-helm<helm-version>` | Specific release with exact Helm version |
 
 ```sh
 # Latest with Helm 4 (default)
 docker pull ghcr.io/mkubaczyk/helmsman:latest
 
 # Specific release with Helm 4
-docker pull ghcr.io/mkubaczyk/helmsman:v4.0.3
+docker pull ghcr.io/mkubaczyk/helmsman:<version>
 
 # Specific release with Helm 3
-docker pull ghcr.io/mkubaczyk/helmsman:v4.0.3-helm3
+docker pull ghcr.io/mkubaczyk/helmsman:<version>-helm3
 ```
+
+Replace `<version>` with the desired Helmsman version. See the [latest release](https://github.com/mkubaczyk/helmsman/releases/latest) for available tags.
 
 ## As a package
 

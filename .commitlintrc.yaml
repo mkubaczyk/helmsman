@@ -5,3 +5,5 @@ rules:
     - 2
     - always
     - [feat, fix, chore]
+  body-max-line-length:
+    - 0

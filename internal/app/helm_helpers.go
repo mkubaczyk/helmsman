@@ -59,17 +59,19 @@ func getChartInfo(chartName, chartVersion string) (*ChartInfo, error) {
 		log.Fatal(fmt.Sprint(err))
 	}
 
-	constraint, err := semver.NewConstraint(chartVersion)
-	if err != nil {
-		return nil, err
-	}
-	found, err := semver.NewVersion(c.Version)
-	if err != nil {
-		return nil, err
-	}
+	if chartVersion != "latest" && chartVersion != "" {
+		constraint, err := semver.NewConstraint(chartVersion)
+		if err != nil {
+			return nil, err
+		}
+		found, err := semver.NewVersion(c.Version)
+		if err != nil {
+			return nil, err
+		}
 
-	if !constraint.Check(found) {
-		return nil, fmt.Errorf("chart [ %s ] with version [ %s ] was found with a mismatched version: %s", chartName, chartVersion, c.Version)
+		if !constraint.Check(found) {
+			return nil, fmt.Errorf("chart [ %s ] with version [ %s ] was found with a mismatched version: %s", chartName, chartVersion, c.Version)
+		}
 	}
 
 	return c, nil

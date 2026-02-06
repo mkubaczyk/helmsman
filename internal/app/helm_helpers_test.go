@@ -67,6 +67,19 @@ func Test_getChartInfo(t *testing.T) {
 			},
 			want: nil,
 		},
+		{
+			name: "getChartInfo - latest version should return chart info",
+			args: args{
+				r: &Release{
+					Name:      "release1",
+					Namespace: "namespace",
+					Version:   "latest",
+					Chart:     "./../../tests/chart-test",
+					Enabled:   True,
+				},
+			},
+			want: &ChartInfo{Name: "chart-test", Version: "1.0.0"},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

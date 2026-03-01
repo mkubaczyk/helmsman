@@ -1,6 +1,6 @@
 module github.com/mkubaczyk/helmsman
 
-go 1.24.1
+go 1.25.0
 
 require (
 	cloud.google.com/go/storage v1.60.0
@@ -14,7 +14,7 @@ require (
 	github.com/invopop/jsonschema v0.13.0
 	github.com/logrusorgru/aurora v2.0.3+incompatible
 	github.com/subosito/gotenv v1.6.0
-	golang.org/x/net v0.50.0
+	golang.org/x/net v0.51.0
 	sigs.k8s.io/yaml v1.6.0
 )
 

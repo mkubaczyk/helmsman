@@ -265,9 +265,9 @@ func (c *cli) readState(s *State) error {
 		return err
 	}
 
-	// wipe & create a temporary directory
-	os.RemoveAll(tempFilesDir)
-	_ = os.MkdirAll(tempFilesDir, 0o755)
+	// ensure the temp directory exists (created by os.MkdirTemp in Main();
+	// MkdirAll is a no-op if already present, and creates it for tests).
+	_ = os.MkdirAll(execTempDir, 0o755)
 
 	if len(c.spec) > 0 {
 		sp := new(StateFiles)

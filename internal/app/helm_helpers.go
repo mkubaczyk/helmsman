@@ -14,6 +14,9 @@ import (
 	"github.com/mkubaczyk/helmsman/internal/gcs"
 )
 
+// TODO: this is to avoid shelling out multiple times to get the version,
+// we should look for a more elegant solution than using global variables
+
 var (
 	curHelmVersion     string
 	curHelmVersionOnce sync.Once

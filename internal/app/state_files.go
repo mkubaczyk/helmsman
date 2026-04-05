@@ -171,7 +171,7 @@ func (s *State) build(files fileOptionArray) error {
 // it also loops through the values/secrets files and substitutes variables into them.
 func (s *State) expand(relativeToFile string) {
 	dir := filepath.Dir(relativeToFile)
-	downloadDest, _ := filepath.Abs(createTempDir(tempFilesDir, "tmp"))
+	downloadDest, _ := filepath.Abs(createTempDir(execTempDir, "tmp"))
 	validProtocols := []string{"http", "https"}
 	if checkHelmVersion(">=3.8.0") {
 		validProtocols = append(validProtocols, "oci")

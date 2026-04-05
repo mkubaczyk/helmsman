@@ -567,7 +567,7 @@ func Test_release_getChartVersion(t *testing.T) {
 	}
 }
 
- func Test_release_getDiffArgs(t *testing.T) {
+func Test_release_getDiffArgs(t *testing.T) {
 	// Save original values to restore after test
 	originalHelmVersion := curHelmVersion
 	originalFlags := flags

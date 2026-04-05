@@ -2,6 +2,7 @@
 package app
 
 import (
+	"flag"
 	"fmt"
 	"io"
 	"os"
@@ -18,9 +19,11 @@ const (
 	resourcePool       = 10
 )
 
-// tempFilesDir is overridden in Main() to a PID-scoped path so that concurrent
-// helmsman processes don't collide. The default is used by tests.
-var tempFilesDir = ".helmsman-tmp"
+const tempFilesDir = ".helmsman-tmp"
+
+// execTempDir holds the unique temp directory for this execution, created via
+// os.MkdirTemp in Main(). Defaults to tempFilesDir so tests work without Main().
+var execTempDir = tempFilesDir
 
 var appVersion = "dev"
 
@@ -96,28 +99,26 @@ func runParallelFiles(f *cli) int {
 
 	srcKubeconfig := resolveKubeconfigPath(f)
 
-	// Rebuild args from os.Args, stripping -parallel-files, -kubeconfig, and all
-	// -f flags. We add back a single -f and a per-subprocess -kubeconfig below.
+	// Reconstruct args from the parsed flag set, skipping flags handled per-subprocess.
+	// flag.Visit only iterates flags explicitly set by the user (not defaults).
 	var baseArgs []string
-	skipNext := false
-	for _, arg := range os.Args[1:] {
-		if skipNext {
-			skipNext = false
-			continue
+	flag.Visit(func(fl *flag.Flag) {
+		switch fl.Name {
+		case "parallel-files", "f", "kubeconfig":
+			return // each subprocess gets its own -f and -kubeconfig
+		case "e", "target", "exclude-target", "group", "exclude-group":
+			// Multi-value flags: String() returns space-joined values; reconstruct each.
+			for _, v := range strings.Fields(fl.Value.String()) {
+				baseArgs = append(baseArgs, "-"+fl.Name, v)
+			}
+		default:
+			if fl.Value.String() == "true" {
+				baseArgs = append(baseArgs, "-"+fl.Name)
+			} else {
+				baseArgs = append(baseArgs, "-"+fl.Name, fl.Value.String())
+			}
 		}
-		if arg == "-parallel-files" || arg == "--parallel-files" {
-			continue
-		}
-		if arg == "-f" || arg == "--f" || arg == "-kubeconfig" || arg == "--kubeconfig" {
-			skipNext = true
-			continue
-		}
-		if strings.HasPrefix(arg, "-f=") || strings.HasPrefix(arg, "--f=") ||
-			strings.HasPrefix(arg, "-kubeconfig=") || strings.HasPrefix(arg, "--kubeconfig=") {
-			continue
-		}
-		baseArgs = append(baseArgs, arg)
-	}
+	})
 
 	concurrency := f.parallel
 	if concurrency < 1 {
@@ -178,10 +179,14 @@ func Main() int {
 		return runParallelFiles(&flags)
 	}
 
-	// Each process gets its own temp dir so concurrent helmsman runs don't
-	// collide — the first process to exit would otherwise wipe a shared dir.
-	tempFilesDir = fmt.Sprintf(".helmsman-tmp-%d", os.Getpid())
-	defer os.RemoveAll(tempFilesDir)
+	// Each process gets its own unique temp dir via os.MkdirTemp so that
+	// concurrent helmsman runs don't collide on disk.
+	var tmpErr error
+	execTempDir, tmpErr = os.MkdirTemp("", tempFilesDir+"-*")
+	if tmpErr != nil {
+		log.Fatal("could not create temp dir: " + tmpErr.Error())
+	}
+	defer os.RemoveAll(execTempDir)
 	if !flags.noCleanup {
 		defer s.cleanup()
 	}

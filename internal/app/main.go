@@ -8,7 +8,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"strings"
 	"sync"
 )
 
@@ -20,10 +19,6 @@ const (
 )
 
 const tempFilesDir = ".helmsman-tmp"
-
-// execTempDir holds the unique temp directory for this execution, created via
-// os.MkdirTemp in Main(). Defaults to tempFilesDir so tests work without Main().
-var execTempDir = tempFilesDir
 
 var appVersion = "dev"
 
@@ -101,23 +96,23 @@ func runParallelFiles(f *cli) int {
 
 	// Reconstruct args from the parsed flag set, skipping flags handled per-subprocess.
 	// flag.Visit only iterates flags explicitly set by the user (not defaults).
+	// --name=value is valid for all Go flag types (bool, string, int).
 	var baseArgs []string
 	flag.Visit(func(fl *flag.Flag) {
 		switch fl.Name {
 		case "parallel-files", "f", "kubeconfig":
 			return // each subprocess gets its own -f and -kubeconfig
-		case "e", "target", "exclude-target", "group", "exclude-group":
-			// Multi-value flags: String() returns space-joined values; reconstruct each.
-			for _, v := range strings.Fields(fl.Value.String()) {
-				baseArgs = append(baseArgs, "-"+fl.Name, v)
-			}
-		default:
-			if fl.Value.String() == "true" {
-				baseArgs = append(baseArgs, "-"+fl.Name)
-			} else {
-				baseArgs = append(baseArgs, "-"+fl.Name, fl.Value.String())
-			}
 		}
+		// stringArray flags: String() returns space-joined values — iterate the
+		// underlying slice directly to avoid splitting values that contain spaces.
+		if a, ok := fl.Value.(*stringArray); ok {
+			for _, val := range *a {
+				baseArgs = append(baseArgs, fmt.Sprintf("--%s=%s", fl.Name, val))
+			}
+			return
+		}
+		// All other types (bool, string, int): --name=value works uniformly.
+		baseArgs = append(baseArgs, fmt.Sprintf("--%s=%s", fl.Name, fl.Value.String()))
 	})
 
 	concurrency := f.parallel
@@ -182,11 +177,11 @@ func Main() int {
 	// Each process gets its own unique temp dir via os.MkdirTemp so that
 	// concurrent helmsman runs don't collide on disk.
 	var tmpErr error
-	execTempDir, tmpErr = os.MkdirTemp("", tempFilesDir+"-*")
+	flags.tempDir, tmpErr = os.MkdirTemp("", tempFilesDir+"-*")
 	if tmpErr != nil {
 		log.Fatal("could not create temp dir: " + tmpErr.Error())
 	}
-	defer os.RemoveAll(execTempDir)
+	defer os.RemoveAll(flags.tempDir)
 	if !flags.noCleanup {
 		defer s.cleanup()
 	}

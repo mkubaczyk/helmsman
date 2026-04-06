@@ -65,7 +65,7 @@ func substituteVarsInYaml(file string) string {
 		yamlFile = substituteSSM(yamlFile)
 	}
 
-	dir := createTempDir(execTempDir, "tmp")
+	dir := createTempDir(flags.tempDir, "tmp")
 
 	// output file contents with env variables substituted into temp files
 	outFile := path.Join(dir, filepath.Base(file))

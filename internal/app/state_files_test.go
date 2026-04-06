@@ -12,10 +12,12 @@ func setupStateFileTestCase(t *testing.T) (func(t *testing.T), error) {
 		t.Errorf("setupStateFileTestCase(), failed to create temp files dir: %v", err)
 		return nil, err
 	}
+	flags.tempDir = tempFilesDir
 
 	return func(t *testing.T) {
 		t.Log("teardown test case")
 		os.RemoveAll(tempFilesDir)
+		flags.tempDir = ""
 	}, nil
 }
 

@@ -75,10 +75,10 @@ func copyKubeconfig(src, dst string) error {
 }
 
 // runParallelFiles re-execs the current helmsman binary once per DSF file, running
-// them concurrently. Each subprocess gets full process isolation: its own PID-scoped
-// temp dir, its own kubeconfig copy (so kubectl context changes don't race on the
-// shared ~/.kube/config), and its own in-memory globals. The -p flag controls max
-// concurrency across DSF files.
+// them concurrently. Each subprocess gets full process isolation: its own uniquely-named
+// temp dir (via os.MkdirTemp), its own kubeconfig copy (so kubectl context changes don't
+// race on the shared ~/.kube/config), and its own in-memory globals. The -p flag controls
+// max concurrency across DSF files.
 func runParallelFiles(f *cli) int {
 	exe, err := os.Executable()
 	if err != nil {
@@ -156,8 +156,12 @@ func Main() int {
 	flags.parse()
 
 	// When --parallel-files is set, re-exec once per DSF file as isolated subprocesses.
-	if flags.parallelFiles && len(flags.files) > 1 {
-		return runParallelFiles(&flags)
+	if flags.parallelFiles {
+		if len(flags.files) < 2 {
+			log.Warning("--parallel-files has no effect with fewer than 2 -f flags; running normally")
+		} else {
+			return runParallelFiles(&flags)
+		}
 	}
 
 	// Each process gets its own unique temp dir via os.MkdirTemp so that

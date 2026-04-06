@@ -161,7 +161,7 @@ func (c *cli) setup() {
 	flag.IntVar(&c.pendingAppRetries, "pending-max-retries", 0, "max number of retries for pending helm releases")
 	flag.BoolVar(&c.showSecrets, "show-secrets", false, "show helm diff results with secrets.")
 	flag.BoolVar(&c.verify, "verify", false, "verify if charts are signed and valid before using them")
-	flag.BoolVar(&c.parallelFiles, "parallel-files", false, "run each -f DSF file as an independent helmsman execution in parallel; use -p to control max concurrency")
+	flag.BoolVar(&c.parallelFiles, "parallel-files", false, "run each -f DSF file as an independent helmsman execution in parallel; requires at least 2 -f flags, use -p to control max concurrency")
 	flag.Usage = printUsage
 	flag.Parse()
 }

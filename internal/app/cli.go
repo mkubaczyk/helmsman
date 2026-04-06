@@ -266,10 +266,6 @@ func (c *cli) readState(s *State) error {
 		return err
 	}
 
-	// ensure the temp directory exists (created by os.MkdirTemp in Main();
-	// MkdirAll is a no-op if already present, and creates it for tests).
-	_ = os.MkdirAll(c.tempDir, 0o755)
-
 	if len(c.spec) > 0 {
 		sp := new(StateFiles)
 		if err := sp.specFromYAML(c.spec); err != nil {

@@ -2,13 +2,15 @@
 package app
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"sync"
+
+	"golang.org/x/sync/errgroup"
 )
 
 const (
@@ -16,9 +18,8 @@ const (
 	kubectlBin         = "kubectl"
 	defaultContextName = "default"
 	resourcePool       = 10
+	tempFilesDir       = ".helmsman-tmp"
 )
-
-const tempFilesDir = ".helmsman-tmp"
 
 var appVersion = "dev"
 
@@ -119,46 +120,36 @@ func runParallelFiles(f *cli) int {
 	if concurrency < 1 {
 		concurrency = 1
 	}
-	sem := make(chan struct{}, concurrency)
 
-	var wg sync.WaitGroup
-	exitCodes := make([]int, len(f.files))
+	g := new(errgroup.Group)
+	g.SetLimit(concurrency)
 
 	for i, file := range f.files {
-		wg.Add(1)
-		go func(idx int, filename string) {
-			defer wg.Done()
-			sem <- struct{}{}
-			defer func() { <-sem }()
-
+		i, file := i, file
+		g.Go(func() error {
 			// Each subprocess gets its own kubeconfig copy so that
 			// `kubectl config use-context` calls don't collide on disk.
-			kubeconfigCopy := filepath.Join(orchTmpDir, fmt.Sprintf("kubeconfig-%d", idx))
+			kubeconfigCopy := filepath.Join(orchTmpDir, fmt.Sprintf("kubeconfig-%d", i))
 			if err := copyKubeconfig(srcKubeconfig, kubeconfigCopy); err != nil {
-				log.Fatal(fmt.Sprintf("could not copy kubeconfig for DSF %s: %v", filename, err))
+				return fmt.Errorf("could not copy kubeconfig for DSF %s: %w", file.name, err)
 			}
 
-			args := append(append([]string{}, baseArgs...), "-f", filename, "-kubeconfig", kubeconfigCopy)
+			args := append(append([]string{}, baseArgs...), "-f", file.name, "--kubeconfig="+kubeconfigCopy)
 			cmd := exec.Command(exe, args...)
 			cmd.Stdout = os.Stdout
 			cmd.Stderr = os.Stderr
 			cmd.Stdin = os.Stdin
-			if err := cmd.Run(); err != nil {
-				if exitErr, ok := err.(*exec.ExitError); ok {
-					exitCodes[idx] = exitErr.ExitCode()
-				} else {
-					exitCodes[idx] = 1
-				}
-			}
-		}(i, file.name)
+			return cmd.Run()
+		})
 	}
 
-	wg.Wait()
-
-	for _, code := range exitCodes {
-		if code != 0 {
-			return code
+	if err := g.Wait(); err != nil {
+		var exitErr *exec.ExitError
+		if errors.As(err, &exitErr) {
+			return exitErr.ExitCode()
 		}
+		log.Error("parallel execution failed: " + err.Error())
+		return 1
 	}
 	return exitCodeSucceed
 }

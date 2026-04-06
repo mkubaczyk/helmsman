@@ -10,6 +10,7 @@ func setupTestCase(t *testing.T) (func(t *testing.T), error) {
 	if err := os.MkdirAll(tempFilesDir, 0o755); err != nil {
 		return nil, err
 	}
+	flags.tempDir = tempFilesDir
 	if err := os.MkdirAll(os.TempDir()+"/helmsman-tests/myapp", os.ModePerm); err != nil {
 		return nil, err
 	}
@@ -25,6 +26,7 @@ func setupTestCase(t *testing.T) (func(t *testing.T), error) {
 		t.Log("teardown test case")
 		os.RemoveAll(tempFilesDir)
 		os.RemoveAll(os.TempDir() + "/helmsman-tests/")
+		flags.tempDir = ""
 	}, nil
 }
 

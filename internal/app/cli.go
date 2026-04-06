@@ -101,6 +101,7 @@ type cli struct {
 	showSecrets           bool
 	verify                bool
 	parallelFiles         bool
+	tempDir               string
 }
 
 func printUsage() {
@@ -267,7 +268,7 @@ func (c *cli) readState(s *State) error {
 
 	// ensure the temp directory exists (created by os.MkdirTemp in Main();
 	// MkdirAll is a no-op if already present, and creates it for tests).
-	_ = os.MkdirAll(execTempDir, 0o755)
+	_ = os.MkdirAll(c.tempDir, 0o755)
 
 	if len(c.spec) > 0 {
 		sp := new(StateFiles)

@@ -87,7 +87,7 @@ metadata:
 	}
 	definition += Indent(string(d), strings.Repeat(" ", 2))
 
-	targetFile, err := ioutil.TempFile(execTempDir, "namespace-*.yaml")
+	targetFile, err := ioutil.TempFile(flags.tempDir, "namespace-*.yaml")
 	if err != nil {
 		return nil, err
 	}
@@ -217,7 +217,7 @@ spec:
 }
 
 func apply(definition, ns, kind string) error {
-	targetFile, err := ioutil.TempFile(execTempDir, kind+"-*.yaml")
+	targetFile, err := ioutil.TempFile(flags.tempDir, kind+"-*.yaml")
 	if err != nil {
 		return err
 	}

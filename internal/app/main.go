@@ -106,6 +106,7 @@ func runParallelFiles(f *cli) int {
 		}
 		// stringArray flags: String() returns space-joined values — iterate the
 		// underlying slice directly to avoid splitting values that contain spaces.
+		// Note: fileOptionArray (-f) is always skipped above; no case needed here.
 		if a, ok := fl.Value.(*stringArray); ok {
 			for _, val := range *a {
 				baseArgs = append(baseArgs, fmt.Sprintf("--%s=%s", fl.Name, val))
@@ -116,16 +117,10 @@ func runParallelFiles(f *cli) int {
 		baseArgs = append(baseArgs, fmt.Sprintf("--%s=%s", fl.Name, fl.Value.String()))
 	})
 
-	concurrency := f.parallel
-	if concurrency < 1 {
-		concurrency = 1
-	}
-
 	g := new(errgroup.Group)
-	g.SetLimit(concurrency)
+	g.SetLimit(f.parallel)
 
 	for i, file := range f.files {
-		i, file := i, file
 		g.Go(func() error {
 			// Each subprocess gets its own kubeconfig copy so that
 			// `kubectl config use-context` calls don't collide on disk.
@@ -134,7 +129,7 @@ func runParallelFiles(f *cli) int {
 				return fmt.Errorf("could not copy kubeconfig for DSF %s: %w", file.name, err)
 			}
 
-			args := append(append([]string{}, baseArgs...), "-f", file.name, "--kubeconfig="+kubeconfigCopy)
+			args := append([]string{"-f", file.name, "--kubeconfig=" + kubeconfigCopy}, baseArgs...)
 			cmd := exec.Command(exe, args...)
 			cmd.Stdout = os.Stdout
 			cmd.Stderr = os.Stderr

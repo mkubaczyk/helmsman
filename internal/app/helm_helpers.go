@@ -6,7 +6,6 @@ import (
 	"net/url"
 	"path/filepath"
 	"strings"
-	"sync"
 
 	"sigs.k8s.io/yaml"
 
@@ -16,11 +15,7 @@ import (
 
 // TODO: this is to avoid shelling out multiple times to get the version,
 // we should look for a more elegant solution than using global variables
-
-var (
-	curHelmVersion     string
-	curHelmVersionOnce sync.Once
-)
+var curHelmVersion string
 
 type helmRepo struct {
 	Name string `json:"name"`
@@ -82,20 +77,24 @@ func getChartInfo(chartName, chartVersion string) (*ChartInfo, error) {
 	return c, nil
 }
 
-// getHelmVersion returns the Helm client version, fetching it once and caching the result.
+// getHelmClientVersion returns Helm client Version
 func getHelmVersion() string {
-	curHelmVersionOnce.Do(func() {
-		cmd := helmCmd([]string{"version", "--short"}, "Checking Helm version")
-		res, err := cmd.Exec()
-		if err != nil {
-			log.Fatalf("While checking helm version: %v", err)
-		}
-		version := strings.TrimSpace(res.output)
-		if !strings.HasPrefix(version, "v") {
-			version = strings.SplitN(version, ":", 2)[1]
-		}
-		curHelmVersion = strings.TrimSpace(version)
-	})
+	if curHelmVersion != "" {
+		return curHelmVersion
+	}
+	cmd := helmCmd([]string{"version", "--short"}, "Checking Helm version")
+
+	res, err := cmd.Exec()
+	if err != nil {
+		log.Fatalf("While checking helm version: %v", err)
+	}
+
+	version := strings.TrimSpace(res.output)
+	if !strings.HasPrefix(version, "v") {
+		version = strings.SplitN(version, ":", 2)[1]
+	}
+	curHelmVersion = strings.TrimSpace(version)
+
 	return curHelmVersion
 }
 

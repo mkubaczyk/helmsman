@@ -1,0 +1,23 @@
+helmRepos:
+  kyverno: https://kyverno.github.io/kyverno/
+
+namespaces:
+  kyverno:
+    protected: false
+
+apps:
+  kyverno:
+    namespace: kyverno
+    enabled: true
+    chart: kyverno/kyverno
+    version: 2.4.1
+  kyverno-policies:
+    namespace: kyverno
+    enabled: true
+    chart: kyverno/kyverno-policies
+    version: 2.4.0
+  kyverno-reporter:
+    namespace: kyverno
+    enabled: true
+    chart: kyverno/kyverno-reporter
+    version: 2.9.0

@@ -1,0 +1,29 @@
+namespaces:
+  production:
+    protected: true
+    limits:
+      - type: Container
+        default:
+          cpu: "300m"
+          memory: "200Mi"
+        defaultRequest:
+          cpu: "200m"
+          memory: "100Mi"
+      - type: Pod
+        max:
+          memory: "300Mi"
+
+apps:
+  artifactory:
+    namespace: "production"
+    enabled: true
+    chart: "jfrog/artifactory"
+    version: "8.3.2"
+    valuesFile: ""
+    test: false
+    priority: -2
+    noHooks: false
+    timeout: 300
+    maxHistory: 4
+    helmFlags:
+      - "--devel"

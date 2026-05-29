@@ -1,0 +1,140 @@
+# version: v3.0.0
+
+# context defines the context of this Desired State File.
+# It is used to allow Helmsman identify which releases are managed by which DSF.
+# Therefore, it is important that each DSF uses a unique context.
+context= "test-infra"   # defaults to "default" if not provided
+
+# metadata -- add as many key/value pairs as you want
+[metadata]
+  org = "example.com/${ORG_PATH}/"
+  maintainer = "k8s-admin (me@example.com)"
+  description = "example Desired State File for demo purposes."
+  key= "${VALUE}"
+
+
+# paths to the certificate for connecting to the cluster
+# You can skip this if you use Helmsman on a machine with kubectl already connected to your k8s cluster.
+# you have to use exact key names here : 'caCrt' for certificate and 'caKey' for the key and caClient for the client certificate
+[certificates]
+#  caClient = "gs://mybucket/client.crt" # GCS bucket path
+#  caCrt = "s3://mybucket/ca.crt" # S3 bucket path
+#  caKey = "../ca.key" # valid local file relative path
+
+[settings]
+  kubeContext = "minikube" # will try connect to this context first, if it does not exist, it will be created using the details below
+#  username = "admin"
+#  password = "$K8S_PASSWORD" # the name of an environment variable containing the k8s password
+  # clusterURI = "${SET_URI}" # the name of an environment variable containing the cluster API
+#  #clusterURI = "https://192.168.99.100:8443" # equivalent to the above
+#  storageBackend = "secret" # default is secret
+#  slackWebhook = "$slack" # or "your slack webhook url"
+#  reverseDelete = false # reverse the priorities on delete
+#### to use bearer token:
+#  bearerToken = true
+#  clusterURI = "https://kubernetes.default"
+#  [settings.globalHooks]
+#     successCondition= "Initialized"
+#     deleteOnSuccess= true
+#     postInstall= "job.yaml"
+  globalMaxHistory= 5
+
+
+
+
+# define your environments and their k8s namespaces
+# syntax:
+# [namespaces.<your namespace>] -- whitespace before this entry does not matter, use whatever indentation style you like
+# protected = <true or false> -- default to false
+[namespaces]
+  [namespaces.production]
+    protected = true
+    [[namespaces.production.limits]]
+      type = "Container"
+      [namespaces.production.limits.default]
+        cpu = "300m"
+        memory = "200Mi"
+      [namespaces.production.limits.defaultRequest]
+        cpu = "200m"
+        memory = "100Mi"
+    [[namespaces.production.limits]]
+      type = "Pod"
+      [namespaces.production.limits.max]
+        memory = "300Mi"
+  [namespaces.staging]
+    protected = false
+    [namespaces.staging.labels]
+      env = "staging"
+    [namespaces.staging.quotas]
+       "limits.cpu" = "10"
+       "limits.memory" = "30Gi"
+       pods = "25"
+       "requests.cpu" = "10"
+       "requests.memory" = "30Gi"
+       [[namespaces.staging.quotas.customQuotas]]
+         name = "requests.nvidia.com/gpu"
+         value = "2"
+
+
+# define any private/public helm charts repos you would like to get charts from
+# syntax: repo_name = "repo_url"
+# only private repos hosted in s3 buckets are now supported
+[helmRepos]
+  argo = "https://argoproj.github.io/argo-helm"
+  jfrog = "https://charts.jfrog.io"
+  # myS3repo = "s3://my-S3-private-repo/charts"
+  # myGCSrepo = "gs://my-GCS-private-repo/charts"
+  # custom = "https://$user:$pass@mycustomrepo.org"
+
+
+# define the desired state of your applications helm charts
+# each contains the following:
+[apps]
+
+  [apps.argo]
+    namespace = "production" # maps to the namespace as defined in namespaces above
+    enabled = true # change to false if you want to delete this app release [default = false]
+    chart = "argo/argo" # changing the chart name means delete and recreate this release
+    version = "0.8.5" # chart version
+    ### Optional values below
+    valuesFile = "" # leaving it empty uses the default chart values
+    test = false # run the tests when this release is installed for the first time only
+    protected = true
+    priority= -3
+    wait = true
+    [apps.argo.hooks]
+    successCondition= "Complete"
+    successTimeout= "90s"
+    deleteOnSuccess= true
+    preInstall="job.yaml"
+    # preInstall="https://github.com/jetstack/cert-manager/releases/download/v0.14.0/cert-manager.crds.yaml"
+    # postInstall="https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml"
+    # preUpgrade="job.yaml"
+    # postUpgrade="job.yaml"
+    # preDelete="job.yaml"
+    # postDelete="job.yaml"
+  # [apps.argo.setString] # values to override values from values.yaml with values from env vars or directly entered-- useful for passing secrets to charts
+  #   AdminPassword="$SOME_PASSWORD" # $SOME_PASSWORD must exist in the environment
+  #   MyLongIntVar="1234567890"
+  [apps.argo.set]
+    "images.tag"="$$TAG" # $$ is escaped and $TAG is passed literally to images.tag (no env variable expansion)
+
+
+  [apps.artifactory]
+    namespace = "production" # maps to the namespace as defined in namespaces above
+    enabled = true # change to false if you want to delete this app release [default = false]
+    chart = "jfrog/artifactory" # changing the chart name means delete and recreate this release
+    version = "8.3.2" # chart version
+    ### Optional values below
+    valuesFile = "" # leaving it empty uses the default chart values
+    test = false # run the tests when this release is installed for the first time only
+    priority= -2
+    noHooks= false
+    timeout= 300
+    maxHistory = 4
+    # additional helm flags for this release
+    helmFlags= [
+      "--devel",
+    ]
+
+# See https://github.com/mkubaczyk/helmsman/blob/master/docs/desired_state_specification.md#apps for more apps options

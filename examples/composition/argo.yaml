@@ -1,0 +1,31 @@
+namespaces:
+  staging:
+    protected: false
+    labels:
+      env: "staging"
+    quotas:
+      limits.cpu: "10"
+      limits.memory: "20Gi"
+      pods: 25
+      requests.cpu: "10"
+      requests.memory: "30Gi"
+      customQuotas:
+        - name: "requests.nvidia.com/gpu"
+          value: "2"
+
+helmRepos:
+  argo: "https://argoproj.github.io/argo-helm"
+
+apps:
+  argo:
+    namespace: "staging"
+    enabled: true
+    chart: "argo/argo"
+    version: "0.8.5"
+    valuesFile: ""
+    test: false
+    protected: true
+    priority: -3
+    wait: true
+    set:
+      "images.tag": latest

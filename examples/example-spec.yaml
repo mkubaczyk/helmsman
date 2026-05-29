@@ -1,0 +1,5 @@
+---
+stateFiles:
+  - path: examples/example.yaml
+  - path: examples/minimal-example.yaml
+  - path: examples/minimal-example.toml

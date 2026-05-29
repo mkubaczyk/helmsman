@@ -1,0 +1,96 @@
+metadata:
+  scope: "K8s Cluster kind-1"
+  maintainer: "devops"
+
+settings:
+  kubeContext: "kind-kind-1" # the name of the context to be created
+  slackWebhook: "$MY_SLACK_WEBHOOK"
+
+namespaces:
+  testing:
+    labels:
+      env: "testing"
+    limits:
+      - type: Container
+        default:
+          cpu: "200m"
+          memory: "250Mi"
+        defaultRequest:
+          cpu: "100m"
+          memory: "150Mi"
+      - type: Pod
+        max:
+          memory: "300Mi"
+  development:
+    labels:
+      env: "development"
+    limits:
+      - type: Container
+        default:
+          cpu: "300m"
+          memory: "300Mi"
+        defaultRequest:
+          cpu: "200m"
+          memory: "200Mi"
+      - type: Pod
+        max:
+          memory: "400Mi"
+
+helmRepos:
+  jenkins: "https://charts.jenkins.io"
+  jfrog: "https://charts.jfrog.io"
+  bitnami: "https://charts.bitnami.com/bitnami"
+  puppet: "https://puppetlabs.github.io/puppetserver-helm-chart"
+
+appsTemplates:
+  common: &common
+    test: true
+
+  testing: &testing
+    namespace: "testing"
+    protected: false # defining all "testing" releases to be protected.
+    wait: true
+
+  development: &development
+    namespace: "development"
+    protected: true # defining all "development" releases to be protected.
+    wait: false
+
+  puppetserver: &puppetserver
+    enabled: true
+    priority: -1
+    chart: "puppet/puppetserver-helm-chart"
+    version: "3.0.2" # chart version
+    valuesFiles: ["../apps/puppetserver/common-values.yaml"]
+
+  tomcat: &tomcat
+    enabled: true
+    priority: -2
+    chart: "bitnami/tomcat"
+    version: "6.5.3" # chart version
+    valuesFiles: ["../apps/tomcat/common-values.yaml"]
+
+apps:
+  testing-puppetserver:
+    <<: *common
+    <<: *testing
+    <<: *puppetserver
+    valuesFiles: ["../apps/puppetserver/testing-values.yaml"]
+
+  testing-tomcat:
+    <<: *common
+    <<: *testing
+    <<: *tomcat
+    valuesFiles: ["../apps/tomcat/testing-values.yaml"]
+
+  development-puppetserver:
+    <<: *common
+    <<: *development
+    <<: *puppetserver
+    valuesFiles: ["../apps/puppetserver/development-values.yaml"]
+
+  development-tomcat:
+    <<: *common
+    <<: *development
+    <<: *tomcat
+    valuesFiles: ["../apps/tomcat/development-values.yaml"]

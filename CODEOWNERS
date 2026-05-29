@@ -1,0 +1,6 @@
+# Workflow files require owner approval
+/.github/workflows/ @mkubaczyk
+
+# Docker and release configuration
+/Dockerfile @mkubaczyk
+/.goreleaser.yaml @mkubaczyk

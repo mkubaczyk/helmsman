@@ -1,0 +1,7 @@
+.git
+.circleci
+.github
+keys
+vendor
+.gitignore
+.idea

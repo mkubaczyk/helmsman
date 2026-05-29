@@ -1,0 +1,53 @@
+name: Test
+
+on:
+  workflow_call:
+    inputs:
+      helm3-version:
+        required: true
+        type: string
+      helm4-version:
+        required: true
+        type: string
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        helm-version: ['${{ inputs.helm3-version }}', '${{ inputs.helm4-version }}']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: stable
+
+      - name: Install Helm ${{ matrix.helm-version }}
+        run: |
+          curl -fsSL https://get.helm.sh/helm-${{ matrix.helm-version }}-linux-amd64.tar.gz | tar xz
+          sudo mv linux-amd64/helm /usr/local/bin/helm
+          rm -rf linux-amd64
+          helm version --short
+
+      - name: Install kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/v1.34.2/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
+          kubectl version --client
+
+      - name: Install Helm plugins
+        run: |
+          VERIFY_FLAG=""
+          [[ "${{ matrix.helm-version }}" == v4* ]] && VERIFY_FLAG="--verify=false"
+          helm plugin install $VERIFY_FLAG https://github.com/databus23/helm-diff --version v3.12.4
+
+      - name: Install eyaml
+        run: sudo gem install hiera-eyaml --no-doc
+
+      - name: Run tests
+        run: make test

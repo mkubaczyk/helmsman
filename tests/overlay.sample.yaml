@@ -1,0 +1,13 @@
+#@ load("@ytt:overlay", "overlay")
+#@overlay/remove
+#@overlay/match by=overlay.subset({"kind":"ServiceAccount"}),expects="1+"
+---
+#@overlay/merge
+#@overlay/match by=overlay.subset({"kind":"Deployment"}),expects="1+"
+---
+apiVersion: apps/v1
+kind: Deployment
+spec:
+  template:
+    spec:
+      serviceAccountName: default

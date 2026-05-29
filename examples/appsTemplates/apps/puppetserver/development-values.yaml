@@ -1,0 +1,4 @@
+r10k:
+  code:
+    cronJob:
+      schedule: "*/2 * * * *"

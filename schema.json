@@ -1,0 +1,473 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mkubaczyk/helmsman/internal/app/state",
+  "$ref": "#/$defs/State",
+  "$defs": {
+    "Config": {
+      "properties": {
+        "kubeContext": {
+          "type": "string",
+          "description": "KubeContext is the kube context you want Helmsman to use or create"
+        },
+        "username": {
+          "type": "string",
+          "description": "Username to be used for kubectl credentials"
+        },
+        "password": {
+          "type": "string",
+          "description": "Password to be used for kubectl credentials"
+        },
+        "clusterURI": {
+          "type": "string",
+          "description": "ClusterURI is the URI for your cluster API or the name of an environment variable (starting with `$`) containing the URI"
+        },
+        "storageBackend": {
+          "type": "string",
+          "description": "StorageBackend indicates the storage backened used by helm, defaults to secret"
+        },
+        "slackWebhook": {
+          "type": "string",
+          "description": "SlackWebhook is the slack webhook URL for slack notifications"
+        },
+        "msTeamsWebhook": {
+          "type": "string",
+          "description": "MSTeamsWebhook is the Microsoft teams webhook URL for teams notifications"
+        },
+        "reverseDelete": {
+          "type": "boolean",
+          "description": "ReverseDelete indicates if the applications should be deleted in reverse orderin relation to the installation order"
+        },
+        "bearerToken": {
+          "type": "boolean",
+          "description": "BearerToken indicates whether you want helmsman to connect to the cluster using a bearer token"
+        },
+        "bearerTokenPath": {
+          "type": "string",
+          "description": "BearerTokenPath allows specifying a custom path for the token"
+        },
+        "namespaceLabelsAuthoritative": {
+          "type": "boolean",
+          "description": "NamespaceLabelsAuthoritativei indicates whether helmsman should remove namespace labels that are not in the DSF"
+        },
+        "vaultEnabled": {
+          "type": "boolean",
+          "description": "VaultEnabled indicates whether the helm vault plugin is used for encrypted files"
+        },
+        "vaultDeliminator": {
+          "type": "string",
+          "description": "VaultDeliminator allows secret deliminator used when parsing to be overridden"
+        },
+        "vaultPath": {
+          "type": "string",
+          "description": "VaultPath allows the secret mount location in Vault to be overridden"
+        },
+        "vaultMountPoint": {
+          "type": "string",
+          "description": "VaultMountPoint allows the Vault Mount Point to be overridden"
+        },
+        "vaultTemplate": {
+          "type": "string",
+          "description": "VaultTemplate Substring with path to vault key instead of deliminator"
+        },
+        "vaultKvVersion": {
+          "type": "string",
+          "description": "VaultKvVersion The version of the KV secrets engine in Vault"
+        },
+        "vaultEnvironment": {
+          "type": "string",
+          "description": "VaultEnvironment Environment that secrets should be stored under"
+        },
+        "eyamlEnabled": {
+          "type": "boolean",
+          "description": "EyamlEnabled indicates whether eyaml is used for encrypted files"
+        },
+        "eyamlPrivateKeyPath": {
+          "type": "string",
+          "description": "EyamlPrivateKeyPath is the path to the eyaml private key"
+        },
+        "eyamlPublicKeyPath": {
+          "type": "string",
+          "description": "EyamlPublicKeyPath is the path to the eyaml public key"
+        },
+        "eyamlGkms": {
+          "type": "boolean",
+          "description": "EyamlGkms indicates whether to use GKMS for eyaml"
+        },
+        "eyamlGkmsProject": {
+          "type": "string",
+          "description": "EyamlGkmsProject is the GCP project where GKMS keys are stored"
+        },
+        "eyamlGkmsLocation": {
+          "type": "string",
+          "description": "EyamlGkmsLocation is the KMS location"
+        },
+        "eyamlGkmsKeyring": {
+          "type": "string",
+          "description": "EyamlGkmsKeyring is the ID of the Cloud KMS key ring"
+        },
+        "eyamlGkmsCryptoKey": {
+          "type": "string",
+          "description": "EyamlGkmsCryptoKey is the ID of the key to use"
+        },
+        "globalHooks": {
+          "type": "object",
+          "description": "GlobalHooks is a set of global lifecycle hooks"
+        },
+        "globalMaxHistory": {
+          "type": "integer",
+          "description": "GlobalMaxHistory sets the global max number of historical release revisions to keep"
+        },
+        "skipIgnoredApps": {
+          "type": "boolean",
+          "description": "SkipIgnoredApps if set to true, ignored apps will not be considered in the plan"
+        },
+        "skipPendingApps": {
+          "type": "boolean",
+          "description": "SkipPendingApps is set to true,apps in a pending state will be ignored"
+        }
+      },
+      "type": "object",
+      "required": [
+        "eyamlGkms"
+      ],
+      "description": "Config type represents the settings fields"
+    },
+    "CustomResource": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the custom resource"
+        },
+        "value": {
+          "type": "string",
+          "description": "Value of the custom resource"
+        }
+      },
+      "type": "object",
+      "description": "custom resource type"
+    },
+    "Limit": {
+      "properties": {
+        "max": {
+          "$ref": "#/$defs/Resources",
+          "description": "Max defines the resource limits"
+        },
+        "min": {
+          "$ref": "#/$defs/Resources",
+          "description": "Min defines the resource request"
+        },
+        "default": {
+          "$ref": "#/$defs/Resources",
+          "description": "Default stes resource limits to pods without defined resource limits"
+        },
+        "defaultRequest": {
+          "$ref": "#/$defs/Resources",
+          "description": "DefaultRequest sets the resource requests for pods without defined resource requests"
+        },
+        "maxLimitRequestRatio": {
+          "$ref": "#/$defs/Resources",
+          "description": "MaxLimitRequestRatio set the max limit request ratio"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "description": "Limit represents a resource limit"
+    },
+    "Limits": {
+      "items": {
+        "$ref": "#/$defs/Limit"
+      },
+      "type": "array",
+      "description": "Limits type"
+    },
+    "Namespace": {
+      "properties": {
+        "protected": {
+          "type": "boolean",
+          "description": "Protected if set to true no changes can be applied to the namespace"
+        },
+        "limits": {
+          "$ref": "#/$defs/Limits",
+          "description": "Limits to set on the namespace"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Labels to set to the namespace"
+        },
+        "annotations": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Annotations to set on the namespace"
+        },
+        "quotas": {
+          "$ref": "#/$defs/Quotas",
+          "description": "Quotas to set on the namespace"
+        }
+      },
+      "type": "object",
+      "required": [
+        "protected"
+      ],
+      "description": "Namespace type represents the fields of a Namespace"
+    },
+    "NullBool": {
+      "type": "boolean"
+    },
+    "Quotas": {
+      "properties": {
+        "pods": {
+          "type": "string",
+          "description": "Pods is the pods quota"
+        },
+        "limits.cpu": {
+          "type": "string",
+          "description": "CPULimits is the CPU quota"
+        },
+        "requests.cpu": {
+          "type": "string",
+          "description": "CPURequests is the CPU requests quota"
+        },
+        "limits.memory": {
+          "type": "string",
+          "description": "MemoryLimits is the memory quota"
+        },
+        "requests.memory": {
+          "type": "string",
+          "description": "MemoryRequests is the memory requests quota"
+        },
+        "customQuotas": {
+          "items": {
+            "$ref": "#/$defs/CustomResource"
+          },
+          "type": "array",
+          "description": "CustomResource is a list of custom resource quotas"
+        }
+      },
+      "type": "object",
+      "description": "quota type"
+    },
+    "Release": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name is the helm release name"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description is a user friendly description of the helm release"
+        },
+        "namespace": {
+          "type": "string",
+          "description": "Namespace where to deploy the helm release"
+        },
+        "enabled": {
+          "$ref": "#/$defs/NullBool",
+          "description": "Enabled can be used to togle a helm release"
+        },
+        "group": {
+          "type": "string"
+        },
+        "chart": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string",
+          "description": "Version of the helm chart to deploy"
+        },
+        "valuesFile": {
+          "type": "string",
+          "description": "ValuesFile is the path for a values file for the helm release"
+        },
+        "valuesFiles": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "ValuesFiles is a list of paths a values files for the helm release"
+        },
+        "secretsFile": {
+          "type": "string",
+          "description": "SecretsFile is the path for an encrypted values file for the helm release"
+        },
+        "secretsFiles": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "SecretsFiles is a list of paths for encrypted values files for the helm release"
+        },
+        "postRenderer": {
+          "type": "string",
+          "description": "PostRenderer is the path to an executable to be used for post rendering"
+        },
+        "test": {
+          "$ref": "#/$defs/NullBool",
+          "description": "Test indicates if the chart tests should be executed"
+        },
+        "protected": {
+          "$ref": "#/$defs/NullBool",
+          "description": "Protected defines if the release should be protected against changes"
+        },
+        "wait": {
+          "$ref": "#/$defs/NullBool",
+          "description": "Wait defines whether helm should block execution until all k8s resources are in a ready state"
+        },
+        "priority": {
+          "type": "integer",
+          "description": "Priority allows defining the execution order, releases with the same priority can be executed in parallel"
+        },
+        "set": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Set can be used to overwrite the chart values"
+        },
+        "setString": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "SetString can be used to overwrite string values"
+        },
+        "setFile": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "SetFile can be used to overwrite the chart values"
+        },
+        "helmFlags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "HelmFlags is a list of additional flags to pass to the helm command"
+        },
+        "helmDiffFlags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "HelmDiffFlags is a list of cli flags to pass to helm diff"
+        },
+        "noHooks": {
+          "$ref": "#/$defs/NullBool",
+          "description": "NoHooks can be used to disable the execution of helm hooks"
+        },
+        "timeout": {
+          "type": "integer",
+          "description": "Timeout is the number of seconds to wait for the release to complete"
+        },
+        "hooks": {
+          "type": "object",
+          "description": "Hooks can be used to define lifecycle hooks specific to this release"
+        },
+        "maxHistory": {
+          "type": "integer",
+          "description": "MaxHistory is the maximum number of histoical releases to keep"
+        }
+      },
+      "type": "object",
+      "required": [
+        "name",
+        "namespace",
+        "enabled",
+        "chart",
+        "version"
+      ],
+      "description": "Release type representing Helm releases which are described in the desired state"
+    },
+    "Resources": {
+      "properties": {
+        "cpu": {
+          "type": "string",
+          "description": "CPU is the number of CPU cores"
+        },
+        "memory": {
+          "type": "string",
+          "description": "Memory is the amount of memory"
+        }
+      },
+      "type": "object",
+      "description": "Resources type"
+    },
+    "State": {
+      "properties": {
+        "metadata": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Metadata for human reader of the desired state file"
+        },
+        "certificates": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Certificates are used to connect kubectl to a cluster"
+        },
+        "settings": {
+          "$ref": "#/$defs/Config",
+          "description": "Settings for configuring helmsman"
+        },
+        "context": {
+          "type": "string",
+          "description": "Context defines an helmsman scope"
+        },
+        "helmRepos": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "HelmRepos from where to find the application helm charts"
+        },
+        "preconfiguredHelmRepos": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "PreconfiguredHelmRepos is a list of helm repos that are configured outside of the DSF"
+        },
+        "namespaces": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Namespace"
+          },
+          "type": "object",
+          "description": "Namespaces where helmsman will deploy applications"
+        },
+        "apps": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Release"
+          },
+          "type": "object",
+          "description": "Apps holds the configuration for each helm release managed by helmsman"
+        },
+        "appsTemplates": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Release"
+          },
+          "type": "object",
+          "description": "AppsTemplates allow defining YAML objects thatcan be used as a reference with YAML anchors to keep the configuration DRY"
+        }
+      },
+      "type": "object",
+      "required": [
+        "namespaces",
+        "apps"
+      ],
+      "description": "State type represents the desired State of applications on a k8s cluster."
+    }
+  }
+}

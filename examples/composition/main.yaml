@@ -1,0 +1,14 @@
+context: test-infra
+
+metadata:
+  org: "example.com/my_org/"
+  maintainer: "k8s-admin (me@example.com)"
+  description: "example Desired State File for demo purposes."
+
+settings:
+  kubeContext: "minikube"
+  globalMaxHistory: 5
+
+helmRepos:
+  argo: "https://argoproj.github.io/argo-helm"
+  jfrog: "https://charts.jfrog.io"

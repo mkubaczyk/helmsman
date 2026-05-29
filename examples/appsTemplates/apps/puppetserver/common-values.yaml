@@ -1,0 +1,2 @@
+puppetserver:
+  puppeturl: "https://github.com/puppetlabs/control-repo.git"

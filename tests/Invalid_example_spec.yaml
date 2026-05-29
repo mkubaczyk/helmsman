@@ -1,0 +1,4 @@
+---
+stateFiles:
+  name1: invalid/example.yaml
+  name2: invalid/minimal-example.yaml

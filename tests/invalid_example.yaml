@@ -1,0 +1,19 @@
+# THIS IS AN INVALID YAML FILE USED FOR TESTING PURPOSES ONLY.
+metadata:
+  org: orgX
+  maintainer: "k8s-admin"
+
+certificates:
+
+settings:
+  kubeContext:
+
+namespaces:
+  staging: "staging"
+  production: "default"
+
+helmRepos:
+  jenkins: "https://charts.jenkins.io"
+  jfrog: "https://charts.jfrog.io"
+
+apps:

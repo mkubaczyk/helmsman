@@ -1,5 +1,5 @@
-ARG GO_VERSION="1.25.4"
-ARG ALPINE_VERSION="3.21"
+ARG GO_VERSION="1.26.4"
+ARG ALPINE_VERSION="3.24"
 ARG GLOBAL_KUBE_VERSION="v1.34.2"
 ARG GLOBAL_HELM_VERSION="v4.0.4"
 ARG GLOBAL_HELM_DIFF_VERSION="v3.15.2"
@@ -26,7 +26,7 @@ ENV HELM_SECRETS_VERSION=$GLOBAL_HELM_SECRETS_VERSION
 ENV SOPS_VERSION=$GLOBAL_SOPS_VERSION
 ENV HELM_DIFF_THREE_WAY_MERGE=true
 
-RUN apk add --update --no-cache ca-certificates git openssh-client openssl ruby curl wget tar gzip make bash \
+RUN apk add --update --no-cache ca-certificates git openssh-client openssl ruby ruby-dev build-base curl wget tar gzip make bash \
   && curl -L https://github.com/getsops/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.linux.amd64 -o /usr/local/bin/sops \
   && chmod +x /usr/local/bin/sops \
   && curl --retry 5 -L https://dl.k8s.io/release/${KUBE_VERSION}/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl \
@@ -60,7 +60,7 @@ RUN CGO_ENABLED=0 go build -o helmsman -ldflags "-X github.com/mkubaczyk/helmsma
 ### Final Image ###
 FROM alpine:${ALPINE_VERSION} AS base
 
-RUN apk add --update --no-cache ca-certificates git openssh-client ruby curl bash gnupg gcompat \
+RUN apk add --update --no-cache ca-certificates git openssh-client ruby ruby-dev build-base curl bash gnupg gcompat \
   && gem install hiera-eyaml hiera-eyaml-gkms --no-doc \
   && update-ca-certificates
 

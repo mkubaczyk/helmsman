@@ -1,6 +1,6 @@
 module github.com/mkubaczyk/helmsman
 
-go 1.25.8
+go 1.26.4
 
 require (
 	cloud.google.com/go/storage v1.63.0

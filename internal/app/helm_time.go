@@ -42,7 +42,7 @@ func (ht *HelmTime) MarshalJSON() ([]byte, error) {
 	if ht.Time.UnixNano() == nilTime {
 		return []byte("null"), nil
 	}
-	return []byte(fmt.Sprintf("\"%s\"", ht.Time.Format(ctLayout))), nil
+	return fmt.Appendf(nil, "\"%s\"", ht.Time.Format(ctLayout)), nil
 }
 
 func (ht *HelmTime) IsSet() bool {

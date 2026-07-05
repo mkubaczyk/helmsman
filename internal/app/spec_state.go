@@ -1,7 +1,7 @@
 package app
 
 import (
-	"io/ioutil"
+	"os"
 
 	"sigs.k8s.io/yaml"
 )
@@ -17,7 +17,7 @@ type StateFiles struct {
 // specFromYAML reads a yaml file and decodes it to a state type.
 // parser which throws an error if the YAML file is not valid.
 func (pc *StateFiles) specFromYAML(file string) error {
-	rawYamlFile, err := ioutil.ReadFile(file)
+	rawYamlFile, err := os.ReadFile(file)
 	if err != nil {
 		log.Errorf("specFromYaml %v %v", file, err)
 		return err

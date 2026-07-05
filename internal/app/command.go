@@ -77,7 +77,7 @@ func (c *Command) RetryExecWithThreshold(attempts, exitCodeThreshold int) (ExitS
 		err    error
 	)
 
-	for i := 0; i < attempts; i++ {
+	for i := range attempts {
 		result, err = c.Exec()
 		if err == nil || (result.code >= 0 && result.code <= exitCodeThreshold) {
 			return result, nil
@@ -191,7 +191,7 @@ func (p CmdPipe) RetryExecWithThreshold(attempts, exitCodeThreshold int) (ExitSt
 	)
 
 	l := len(p) - 1
-	for i := 0; i < attempts; i++ {
+	for i := range attempts {
 		result, err = p.Exec()
 		if err == nil || (result.code >= 0 && result.code <= exitCodeThreshold) {
 			return result, nil

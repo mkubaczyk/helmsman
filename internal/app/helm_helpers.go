@@ -122,7 +122,7 @@ func getHelmPlugVersion(plugin string) string {
 	if err != nil {
 		return "0.0.0"
 	}
-	for _, line := range strings.Split(strings.TrimSuffix(res.output, "\n"), "\n") {
+	for line := range strings.SplitSeq(strings.TrimSuffix(res.output, "\n"), "\n") {
 		info := strings.Fields(line)
 		if len(info) < 2 {
 			continue

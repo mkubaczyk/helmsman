@@ -5,13 +5,13 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
 	"path"
 	"path/filepath"
 	"regexp"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -49,7 +49,7 @@ func printNamespacesMap(m map[string]*Namespace) {
 // substituteVarsInYaml substitutes variables in a Yaml file and creates a temp file with these values.
 // Returns the path for the temp file
 func substituteVarsInYaml(file string) string {
-	rawYamlFile, err := ioutil.ReadFile(file)
+	rawYamlFile, err := os.ReadFile(file)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -69,7 +69,7 @@ func substituteVarsInYaml(file string) string {
 
 	// output file contents with env variables substituted into temp files
 	outFile := path.Join(dir, filepath.Base(file))
-	err = ioutil.WriteFile(outFile, []byte(yamlFile), 0o644)
+	err = os.WriteFile(outFile, []byte(yamlFile), 0o644)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -78,12 +78,7 @@ func substituteVarsInYaml(file string) string {
 
 // func stringInSlice checks if a string is in a slice
 func stringInSlice(a string, list []string) bool {
-	for _, b := range list {
-		if b == a {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(list, a)
 }
 
 // resolveOnePath takes the input file (URL, cloud bucket, or local file relative path),
@@ -91,7 +86,7 @@ func stringInSlice(a string, list []string) bool {
 // and downloads/fetches the file locally into helmsman temp directory and returns
 // its absolute path
 func resolveOnePath(file string, dir string, downloadDest string) (string, error) {
-	destFile, err := ioutil.TempFile(downloadDest, fmt.Sprintf("*%s", path.Base(file)))
+	destFile, err := os.CreateTemp(downloadDest, fmt.Sprintf("*%s", path.Base(file)))
 	if err != nil {
 		return "", err
 	}
@@ -101,7 +96,7 @@ func resolveOnePath(file string, dir string, downloadDest string) (string, error
 
 // createTempDir creates a temp directory in a specific location with a pattern
 func createTempDir(parent string, pattern string) string {
-	dir, err := ioutil.TempDir(parent, pattern)
+	dir, err := os.MkdirTemp(parent, pattern)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -124,18 +119,13 @@ func isSupportedProtocol(ref string, protocols []string) bool {
 	if err != nil {
 		log.Fatalf("%s is not a valid path: %s", ref, err)
 	}
-	for _, p := range protocols {
-		if u.Scheme == p {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(protocols, u.Scheme)
 }
 
 // readFile returns the content of a file as a string.
 // takes a file path as input. It throws an error and breaks the program execution if it fails to read the file.
 func readFile(filepath string) string {
-	data, err := ioutil.ReadFile(filepath)
+	data, err := os.ReadFile(filepath)
 	if err != nil {
 		log.Fatal("failed to read [ " + filepath + " ] file content: " + err.Error())
 	}
@@ -422,7 +412,7 @@ func notifySlack(content string, url string, failure bool, executing bool) bool 
 // replaceStringInFile takes a map of keys and values and replaces the keys with values within a given file.
 // It saves the modified content in a new file
 func replaceStringInFile(filename string, replacements map[string]string) error {
-	output, err := ioutil.ReadFile(filename)
+	output, err := os.ReadFile(filename)
 	if err != nil {
 		return fmt.Errorf("failed to read file: %w", err)
 	}
@@ -431,7 +421,7 @@ func replaceStringInFile(filename string, replacements map[string]string) error 
 		output = bytes.ReplaceAll(output, []byte(k), []byte(v))
 	}
 
-	if err := ioutil.WriteFile(filename, output, 0o666); err != nil {
+	if err := os.WriteFile(filename, output, 0o666); err != nil {
 		return fmt.Errorf("failed to write file: %w", err)
 	}
 	return nil

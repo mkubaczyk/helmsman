@@ -71,7 +71,7 @@ func (m MergoTransformer) Transformer(typ reflect.Type) func(dst, src reflect.Va
 
 // NullBoolTransformer is a custom imdario/mergo transformer for the NullBool type
 func NullBoolTransformer(typ reflect.Type) func(dst, src reflect.Value) error {
-	if typ != reflect.TypeOf(NullBool{}) {
+	if typ != reflect.TypeFor[NullBool]() {
 		return nil
 	}
 

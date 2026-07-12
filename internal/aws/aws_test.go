@@ -40,7 +40,7 @@ func TestS3DownloadFailsWithoutCredentials(t *testing.T) {
 	}()
 
 	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String("us-east-1"),
+		Region: new("us-east-1"),
 		Credentials: credentials.NewCredentials(&credentials.ChainProvider{
 			Providers: []credentials.Provider{
 				&credentials.EnvProvider{},
@@ -55,8 +55,8 @@ func TestS3DownloadFailsWithoutCredentials(t *testing.T) {
 
 	downloader := s3manager.NewDownloader(sess)
 	_, err = downloader.Download(&fakeWriterAt{}, &s3.GetObjectInput{
-		Bucket: aws.String("test-bucket"),
-		Key:    aws.String("test-key"),
+		Bucket: new("test-bucket"),
+		Key:    new("test-key"),
 	})
 
 	if err == nil {

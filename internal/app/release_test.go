@@ -1,6 +1,7 @@
 package app
 
 import (
+	"slices"
 	"testing"
 )
 
@@ -243,7 +244,7 @@ func Test_release_validate(t *testing.T) {
 					Chart:       "repo/chartX",
 					Version:     "1.0",
 					ValuesFile:  "../../tests/values.yaml",
-					Hooks:       map[string]interface{}{preInstall: "xyz.fake"},
+					Hooks:       map[string]any{preInstall: "xyz.fake"},
 				},
 				s: st,
 			},
@@ -259,7 +260,7 @@ func Test_release_validate(t *testing.T) {
 					Chart:       "repo/chartX",
 					Version:     "1.0",
 					ValuesFile:  "../../tests/values.yaml",
-					Hooks:       map[string]interface{}{preInstall: "../../tests/values.xml"},
+					Hooks:       map[string]any{preInstall: "../../tests/values.xml"},
 				},
 				s: st,
 			},
@@ -275,7 +276,7 @@ func Test_release_validate(t *testing.T) {
 					Chart:       "repo/chartX",
 					Version:     "1.0",
 					ValuesFile:  "../../tests/values.yaml",
-					Hooks:       map[string]interface{}{preDelete: "../../tests/values.yaml"},
+					Hooks:       map[string]any{preDelete: "../../tests/values.yaml"},
 				},
 				s: st,
 			},
@@ -291,7 +292,7 @@ func Test_release_validate(t *testing.T) {
 					Chart:       "repo/chartX",
 					Version:     "1.0",
 					ValuesFile:  "../../tests/values.yaml",
-					Hooks:       map[string]interface{}{postUpgrade: "https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml"},
+					Hooks:       map[string]any{postUpgrade: "https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml"},
 				},
 				s: st,
 			},
@@ -307,7 +308,7 @@ func Test_release_validate(t *testing.T) {
 					Chart:       "repo/chartX",
 					Version:     "1.0",
 					ValuesFile:  "../../tests/values.yaml",
-					Hooks:       map[string]interface{}{preDelete: "https//raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml"},
+					Hooks:       map[string]any{preDelete: "https//raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml"},
 				},
 				s: st,
 			},
@@ -323,7 +324,7 @@ func Test_release_validate(t *testing.T) {
 					Chart:       "repo/chartX",
 					Version:     "1.0",
 					ValuesFile:  "../../tests/values.yaml",
-					Hooks:       map[string]interface{}{"afterDelete": "https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml"},
+					Hooks:       map[string]any{"afterDelete": "https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml"},
 				},
 				s: st,
 			},
@@ -339,7 +340,7 @@ func Test_release_validate(t *testing.T) {
 					Chart:       "repo/chartX",
 					Version:     "1.0",
 					ValuesFile:  "../../tests/values.yaml",
-					Hooks:       map[string]interface{}{"PreDelete": "https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml"},
+					Hooks:       map[string]any{"PreDelete": "https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml"},
 				},
 				s: st,
 			},
@@ -389,7 +390,7 @@ func Test_release_validate(t *testing.T) {
 					Chart:       "repo/chartX",
 					Version:     "1.0",
 					ValuesFile:  "../../tests/values.yaml",
-					Hooks:       map[string]interface{}{preDelete: "../../tests/post-renderer.sh"},
+					Hooks:       map[string]any{preDelete: "../../tests/post-renderer.sh"},
 				},
 				s: st,
 			},
@@ -415,7 +416,7 @@ func Test_release_inheritHooks(t *testing.T) {
 		Metadata:     make(map[string]string),
 		Certificates: make(map[string]string),
 		Settings: Config{
-			GlobalHooks: map[string]interface{}{
+			GlobalHooks: map[string]any{
 				preInstall:         "https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml",
 				postInstall:        "https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml",
 				"successCondition": "Complete",
@@ -447,7 +448,7 @@ func Test_release_inheritHooks(t *testing.T) {
 					Chart:       "repo/chartX",
 					Version:     "1.0",
 					ValuesFile:  "../../tests/values.yaml",
-					Hooks: map[string]interface{}{
+					Hooks: map[string]any{
 						postInstall:      "../../tests/values.yaml",
 						preDelete:        "../../tests/values.yaml",
 						"successTimeout": "360s",
@@ -621,13 +622,7 @@ func Test_release_getDiffArgs(t *testing.T) {
 			flags = cli{}
 
 			args := r.getDiffArgs()
-			hasFlag := false
-			for _, arg := range args {
-				if arg == tt.wantFlag {
-					hasFlag = true
-					break
-				}
-			}
+			hasFlag := slices.Contains(args, tt.wantFlag)
 
 			if hasFlag != tt.shouldHave {
 				t.Errorf("getDiffArgs() with helm %s: got flag %s present=%v, want present=%v. Args: %v",

@@ -36,8 +36,8 @@ func ReadFile(bucketName string, filename string, outFile string, noColors bool)
 
 	_, err = downloader.Download(file,
 		&s3.GetObjectInput{
-			Bucket: aws.String(bucketName),
-			Key:    aws.String(filename),
+			Bucket: new(bucketName),
+			Key:    new(filename),
 		})
 	if err != nil {
 		log.Fatal(style.Bold(style.Red("ERROR: Failed to download file  " + filename + " from S3: " + err.Error())))

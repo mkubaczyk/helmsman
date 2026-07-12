@@ -23,15 +23,15 @@ type CustomResource struct {
 // Limit represents a resource limit
 type Limit struct {
 	// Max defines the resource limits
-	Max Resources `json:"max,omitempty"`
+	Max Resources `json:"max,omitzero"`
 	// Min defines the resource request
-	Min Resources `json:"min,omitempty"`
+	Min Resources `json:"min,omitzero"`
 	// Default stes resource limits to pods without defined resource limits
-	Default Resources `json:"default,omitempty"`
+	Default Resources `json:"default,omitzero"`
 	// DefaultRequest sets the resource requests for pods without defined resource requests
-	DefaultRequest Resources `json:"defaultRequest,omitempty"`
+	DefaultRequest Resources `json:"defaultRequest,omitzero"`
 	// MaxLimitRequestRatio set the max limit request ratio
-	MaxLimitRequestRatio Resources `json:"maxLimitRequestRatio,omitempty"`
+	MaxLimitRequestRatio Resources `json:"maxLimitRequestRatio,omitzero"`
 	Type                 string    `json:"type"`
 }
 

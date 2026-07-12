@@ -35,7 +35,7 @@ func (h *hookCmd) getAnnotationKey() (string, error) {
 }
 
 // validateHooks validates that hook files exist and are of correct type
-func validateHooks(hooks map[string]interface{}) error {
+func validateHooks(hooks map[string]any) error {
 	for key, value := range hooks {
 		switch key {
 		case preInstall, postInstall, preUpgrade, postUpgrade, preDelete, postDelete:

@@ -118,12 +118,12 @@ func Test_fromTOML_Expand(t *testing.T) {
 			}
 
 			tomlVal := reflect.ValueOf(tt.args.s).Elem()
-			tomlType := reflect.TypeOf(tt.args.s)
+			tomlType := reflect.TypeFor[*State]()
 
 			if tomlType.Kind() != reflect.Struct {
 
 				section := tomlVal.FieldByName(tt.section)
-				sectionType := reflect.TypeOf(section)
+				sectionType := reflect.TypeFor[reflect.Value]()
 
 				if section.IsValid() && section.Kind() == reflect.Struct {
 					field := section.FieldByName(tt.field)
@@ -313,12 +313,12 @@ func Test_fromYAML_Expand(t *testing.T) {
 			}
 
 			yamlVal := reflect.ValueOf(tt.args.s).Elem()
-			yamlType := reflect.TypeOf(tt.args.s)
+			yamlType := reflect.TypeFor[*State]()
 
 			if yamlType.Kind() != reflect.Struct {
 
 				section := yamlVal.FieldByName(tt.section)
-				sectionType := reflect.TypeOf(section)
+				sectionType := reflect.TypeFor[reflect.Value]()
 
 				if section.IsValid() && section.Kind() == reflect.Struct {
 					field := section.FieldByName(tt.field)

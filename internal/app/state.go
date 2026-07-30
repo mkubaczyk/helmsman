@@ -65,7 +65,7 @@ type Config struct {
 	// EyamlGkmsCryptoKey is the ID of the key to use
 	EyamlGkmsCryptoKey string `json:"eyamlGkmsCryptoKey,omitempty"`
 	// GlobalHooks is a set of global lifecycle hooks
-	GlobalHooks map[string]interface{} `json:"globalHooks,omitempty"`
+	GlobalHooks map[string]any `json:"globalHooks,omitempty"`
 	// GlobalMaxHistory sets the global max number of historical release revisions to keep
 	GlobalMaxHistory int `json:"globalMaxHistory,omitempty"`
 	// SkipIgnoredApps if set to true, ignored apps will not be considered in the plan
@@ -81,7 +81,7 @@ type State struct {
 	// Certificates are used to connect kubectl to a cluster
 	Certificates map[string]string `json:"certificates,omitempty"`
 	// Settings for configuring helmsman
-	Settings Config `json:"settings,omitempty"`
+	Settings Config `json:"settings"`
 	// Context defines an helmsman scope
 	Context string `json:"context,omitempty"`
 	// HelmRepos from where to find the application helm charts

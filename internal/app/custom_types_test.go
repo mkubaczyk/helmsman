@@ -167,7 +167,7 @@ func TestNullBoolTransformer(t *testing.T) {
 			dst := tt.args.dst
 			src := tt.args.src
 
-			transformer := NullBoolTransformer(reflect.TypeOf(NullBool{}))
+			transformer := NullBoolTransformer(reflect.TypeFor[NullBool]())
 
 			transformer(reflect.ValueOf(&dst).Elem(), reflect.ValueOf(src))
 

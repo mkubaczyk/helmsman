@@ -33,11 +33,11 @@ type Release struct {
 	// PostRenderer is the path to an executable to be used for post rendering
 	PostRenderer string `json:"postRenderer,omitempty"`
 	// Test indicates if the chart tests should be executed
-	Test NullBool `json:"test,omitempty"`
+	Test NullBool `json:"test,omitzero"`
 	// Protected defines if the release should be protected against changes
-	Protected NullBool `json:"protected,omitempty"`
+	Protected NullBool `json:"protected,omitzero"`
 	// Wait defines whether helm should block execution until all k8s resources are in a ready state
-	Wait NullBool `json:"wait,omitempty"`
+	Wait NullBool `json:"wait,omitzero"`
 	// Priority allows defining the execution order, releases with the same priority can be executed in parallel
 	Priority int `json:"priority,omitempty"`
 	// Set can be used to overwrite the chart values
@@ -51,11 +51,11 @@ type Release struct {
 	// HelmDiffFlags is a list of cli flags to pass to helm diff
 	HelmDiffFlags []string `json:"helmDiffFlags,omitempty"`
 	// NoHooks can be used to disable the execution of helm hooks
-	NoHooks NullBool `json:"noHooks,omitempty"`
+	NoHooks NullBool `json:"noHooks,omitzero"`
 	// Timeout is the number of seconds to wait for the release to complete
 	Timeout int `json:"timeout,omitempty"`
 	// Hooks can be used to define lifecycle hooks specific to this release
-	Hooks map[string]interface{} `json:"hooks,omitempty"`
+	Hooks map[string]any `json:"hooks,omitempty"`
 	// MaxHistory is the maximum number of histoical releases to keep
 	MaxHistory int `json:"maxHistory,omitempty"`
 	disabled   bool

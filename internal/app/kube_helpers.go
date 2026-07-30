@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strings"
 	"sync"
@@ -87,7 +86,7 @@ metadata:
 	}
 	definition += Indent(string(d), strings.Repeat(" ", 2))
 
-	targetFile, err := ioutil.TempFile(flags.tempDir, "namespace-*.yaml")
+	targetFile, err := os.CreateTemp(flags.tempDir, "namespace-*.yaml")
 	if err != nil {
 		return nil, err
 	}
@@ -187,7 +186,8 @@ func setQuotas(ns string, quotas *Quotas) {
 		return
 	}
 
-	definition := `
+	var definition strings.Builder
+	definition.WriteString(`
 ---
 apiVersion: v1
 kind: ResourceQuota
@@ -195,10 +195,10 @@ metadata:
   name: resource-quota
 spec:
   hard:
-`
+`)
 
 	for _, customQuota := range quotas.CustomQuotas {
-		definition += Indent(customQuota.Name+": '"+customQuota.Value+"'\n", strings.Repeat(" ", 4))
+		definition.WriteString(Indent(customQuota.Name+": '"+customQuota.Value+"'\n", strings.Repeat(" ", 4)))
 	}
 
 	// Special formatting for custom quotas so manually write these and then set to nil for marshalling
@@ -209,15 +209,15 @@ spec:
 		log.Fatal(err.Error())
 	}
 
-	definition += Indent(string(d), strings.Repeat(" ", 4))
+	definition.WriteString(Indent(string(d), strings.Repeat(" ", 4)))
 
-	if err := apply(definition, ns, "ResourceQuota"); err != nil {
+	if err := apply(definition.String(), ns, "ResourceQuota"); err != nil {
 		log.Fatal(err.Error())
 	}
 }
 
 func apply(definition, ns, kind string) error {
-	targetFile, err := ioutil.TempFile(flags.tempDir, kind+"-*.yaml")
+	targetFile, err := os.CreateTemp(flags.tempDir, kind+"-*.yaml")
 	if err != nil {
 		return err
 	}

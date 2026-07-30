@@ -3,7 +3,6 @@ package app
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -37,7 +36,7 @@ func (s *State) toFile(file string) {
 // fromTOML reads a toml file and decodes it to a state type.
 // It uses the BurntSuchi TOML parser which throws an error if the TOML file is not valid.
 func (s *State) fromTOML(file string) error {
-	rawTomlFile, err := ioutil.ReadFile(file)
+	rawTomlFile, err := os.ReadFile(file)
 	if err != nil {
 		return err
 	}
@@ -78,7 +77,7 @@ func (s *State) toTOML(file string) {
 // fromYAML reads a yaml file and decodes it to a state type.
 // parser which throws an error if the YAML file is not valid.
 func (s *State) fromYAML(file string) error {
-	rawYamlFile, err := ioutil.ReadFile(file)
+	rawYamlFile, err := os.ReadFile(file)
 	if err != nil {
 		return err
 	}

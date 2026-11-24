@@ -39,9 +39,22 @@ func addNamespaces(s *State) {
 func kubectl(args []string, desc string) Command {
 	return Command{
 		Cmd:         kubectlBin,
-		Args:        args,
+		Args:        concat(args, kubeContextFlag("--context")),
 		Description: desc,
 	}
+}
+
+// kubeContextFlag returns the given flag (e.g. "--context" or "--kube-context")
+// paired with the kubeconfig context Helmsman pinned at startup, so every
+// invocation targets that context explicitly instead of whatever happens to be
+// "current" in the kubeconfig file at the moment the subprocess starts. Before
+// a context has been resolved (i.e. during the bootstrap calls that resolve it),
+// this returns nil and the flag is omitted.
+func kubeContextFlag(flag string) []string {
+	if curKubeContext == "" {
+		return nil
+	}
+	return []string{flag, curKubeContext}
 }
 
 // createNamespace creates a namespace in the k8s cluster
@@ -326,11 +339,16 @@ func createContext(s *State) error {
 	return errors.New("something went wrong while setting the kube context to the newly created one")
 }
 
-// setKubeContext sets your kubectl context to the one specified in the desired state file.
+// setKubeContext sets your kubectl context to the one specified in the desired state file,
+// and pins it in curKubeContext so every later helm/kubectl call passes it explicitly.
 // It returns false if it fails to set the context. This means the context does not exist.
 func setKubeContext(kctx string) bool {
 	if kctx == "" {
-		return getKubeContext()
+		name, ok := getKubeContext()
+		if ok {
+			curKubeContext = name
+		}
+		return ok
 	}
 
 	cmd := kubectl([]string{"config", "use-context", kctx}, "Setting kube context to [ "+kctx+" ]")
@@ -340,20 +358,22 @@ func setKubeContext(kctx string) bool {
 		return false
 	}
 
+	curKubeContext = kctx
 	return true
 }
 
 // getKubeContext gets your kubectl context.
-// It returns false if no context is set.
-func getKubeContext() bool {
+// It returns the context name and false if no context is set.
+func getKubeContext() (string, bool) {
 	cmd := kubectl([]string{"config", "current-context"}, "Getting kubectl context")
 
-	if res, err := cmd.Exec(); err != nil || res.output == "" {
+	res, err := cmd.Exec()
+	if err != nil || res.output == "" {
 		log.Info("Kubectl context is not set")
-		return false
+		return "", false
 	}
 
-	return true
+	return res.output, true
 }
 
 // getReleaseContext extracts the Helmsman release context from the helm storage driver objects (secret or configmap) labels

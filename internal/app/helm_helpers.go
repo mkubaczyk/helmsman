@@ -31,7 +31,7 @@ type ChartInfo struct {
 func helmCmd(args []string, desc string) Command {
 	return Command{
 		Cmd:         helmBin,
-		Args:        args,
+		Args:        concat(args, kubeContextFlag("--kube-context")),
 		Description: desc,
 	}
 }

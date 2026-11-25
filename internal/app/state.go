@@ -146,9 +146,11 @@ func (s *State) validate() error {
 
 	// settings
 	// use reflect.DeepEqual to compare Settings are empty, since it contains a map
-	if (reflect.DeepEqual(s.Settings, Config{}) || s.Settings.KubeContext == "") && !getKubeContext() {
-		return errors.New("settings validation failed -- you have not defined a " +
-			"kubeContext to use. Either define it in the desired state file or pass a kubeconfig with --kubeconfig to use an existing context")
+	if reflect.DeepEqual(s.Settings, Config{}) || s.Settings.KubeContext == "" {
+		if _, ok := getKubeContext(); !ok {
+			return errors.New("settings validation failed -- you have not defined a " +
+				"kubeContext to use. Either define it in the desired state file or pass a kubeconfig with --kubeconfig to use an existing context")
+		}
 	}
 
 	_, caClient := s.Certificates["caClient"]

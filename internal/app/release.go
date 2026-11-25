@@ -273,7 +273,7 @@ func (r *Release) rollback(cs *currentState, p *plan) {
 
 	if r.Namespace == rs.Namespace {
 
-		cmd := helmCmd(concat([]string{"rollback", r.Name, rs.getRevision()}, r.getWait(), r.getTimeout(), r.getNoHooks(), flags.getRunFlags()), "Rolling back release [ "+r.Name+" ] in namespace [ "+r.Namespace+" ]")
+		cmd := helmCmd(concat([]string{"rollback", r.Name, rs.getRevision(), "--namespace", r.Namespace}, r.getWait(), r.getTimeout(), r.getNoHooks(), flags.getRunFlags()), "Rolling back release [ "+r.Name+" ] in namespace [ "+r.Namespace+" ]")
 		p.addCommand(cmd, r.Priority, r, []hookCmd{}, []hookCmd{})
 		r.upgrade(p) // this is to reflect any changes in values file(s)
 		p.addDecision("Release [ "+r.Name+" ] was deleted and is desired to be rolled back to "+

@@ -32,7 +32,14 @@ var (
 	flags      cli
 	settings   *Config
 	curContext string
-	log        = &Logger{}
+	// curKubeContext is the kubeconfig context name Helmsman resolved and pinned
+	// at startup. It is distinct from curContext, which is an unrelated
+	// Helmsman-internal scope label (HELMSMAN_CONTEXT). Every helm/kubectl call
+	// explicitly passes curKubeContext once it's set, so a `kubectl config
+	// use-context` run by another process against the same kubeconfig mid-run
+	// can't silently redirect an in-progress Helmsman run.
+	curKubeContext string
+	log            = &Logger{}
 )
 
 func init() {
